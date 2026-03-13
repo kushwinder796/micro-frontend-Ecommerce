@@ -49,11 +49,9 @@ const LandingPage: React.FC = () => {
                 <div className="text-[10px] text-zinc-500 uppercase tracking-widest font-bold">Premium Preview</div>
               </div>
               <img
-                src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=2426&ixlib=rb-4.0.3"
-                alt="App screenshot"
-                width={2432}
-                height={1442}
-                className="w-[76rem] rounded-xl shadow-2xl ring-1 ring-zinc-100/10 grayscale-[0.5] hover:grayscale-0 transition-all duration-700 hover:scale-[1.01]"
+                src="/ecommerce_hero_preview.png"
+                alt="E-commerce Dashboard Preview"
+                className="w-full h-auto max-w-full rounded-2xl shadow-2xl border border-white/10 transition-all duration-700 hover:scale-[1.02] hover:shadow-cyan-500/10"
               />
             </div>
           </div>

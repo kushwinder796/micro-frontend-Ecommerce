@@ -13,6 +13,11 @@ const ProductCard = ({ product, categoryName }: Props) => {
   const stock = product.stock ?? 0;
   const [imgError, setImgError] = useState(false);
 
+  // Check if user is Admin from localStorage
+  const userStr = localStorage.getItem("user");
+  const user = userStr ? JSON.parse(userStr) : null;
+  const isAdmin = user?.role === "Admin";
+
   const showImage = product.imageUrl && !imgError;
 
   const handleBuyNow = () => {
@@ -47,11 +52,10 @@ const ProductCard = ({ product, categoryName }: Props) => {
 
         {/* Stock badge */}
         <div
-          className={`absolute top-3 right-3 px-2 py-1 rounded-lg text-xs font-bold backdrop-blur-sm ${
-            stock > 0
+          className={`absolute top-3 right-3 px-2 py-1 rounded-lg text-xs font-bold backdrop-blur-sm ${stock > 0
               ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
               : "bg-red-500/20 text-red-400 border border-red-500/30"
-          }`}
+            }`}
         >
           {stock > 0 ? `${stock} in stock` : "Out of stock"}
         </div>
@@ -70,22 +74,24 @@ const ProductCard = ({ product, categoryName }: Props) => {
             ₹{product.price.toLocaleString()}
           </span>
         </div>
-        <div className="flex gap-2 justify-between">
-          <button
-            onClick={handleAddToCart} 
-            className="flex-1 py-2.5 border border-zinc-700 hover:border-cyan-500 hover:text-cyan-400 text-zinc-300 rounded-xl text-xs font-bold transition-all disabled:opacity-40 disabled:cursor-not-allowed"
-          >
-            🛒 Add to Cart
-          </button>
 
-          <button
-            onClick={handleBuyNow}
-            // disabled={stock === 0}
-            className="flex-1 py-2.5 bg-gradient-to-r from-violet-600 to-purple-600 hover:opacity-90 text-white rounded-xl text-xs font-bold transition-all disabled:opacity-40 disabled:cursor-not-allowed"
-          >
-            ⚡ Buy Now
-          </button>
-        </div>
+        {!isAdmin && (
+          <div className="flex gap-2 justify-between">
+            <button
+              onClick={handleAddToCart}
+              className="flex-1 py-2.5 border border-zinc-700 hover:border-cyan-500 hover:text-cyan-400 text-zinc-300 rounded-xl text-xs font-bold transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+            >
+              🛒 Add to Cart
+            </button>
+
+            <button
+              onClick={handleBuyNow}
+              className="flex-1 py-2.5 bg-gradient-to-r from-violet-600 to-purple-600 hover:opacity-90 text-white rounded-xl text-xs font-bold transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+            >
+              ⚡ Buy Now
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

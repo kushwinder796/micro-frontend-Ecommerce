@@ -1,10 +1,10 @@
-import { Suspense, lazy } from "react";
+import { Suspense, lazy, useEffect } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import LandingPage from "./components/LandingPage";
 import ErrorBoundary from "./components/ErrorBoundary";
 import ProtectedRoute from "./routes/ProtectedRoute";
-
+import { useThemeStore } from "./store/useThemeStore";
 
 const AuthApp = lazy(() => import("authApp/AuthApp"));
 const ProductsApp = lazy(() => import("productsApp/ProductsApp"));
@@ -20,8 +20,14 @@ const Spinner = () => (
 );
 
 const App = () => {
+  const { mode } = useThemeStore();
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', mode);
+  }, [mode]);
+
   return (
-    <div className="w-full min-h-screen bg-zinc-950 text-zinc-100 selection:bg-cyan-500/30">
+    <div className="w-full min-h-screen transition-colors duration-300" style={{ backgroundColor: 'var(--bg-primary)', color: 'var(--text-primary)' }}>
       <Navbar />
       <main className="max-w-screen-2xl mx-auto px-4">
         <ErrorBoundary>
@@ -50,3 +56,4 @@ const App = () => {
 };
 
 export default App;
+

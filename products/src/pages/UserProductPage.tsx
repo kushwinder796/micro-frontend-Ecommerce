@@ -3,9 +3,9 @@ import { productService } from "../api/productService";
 import { categoryService } from "../api/categoryService";
 import type { ProductDto } from "../api/productService";
 import type { CategoryDto } from "../api/categoryService";
+import { useNavigate } from "react-router-dom";
 import ProductGrid from "../Components/ProductGrid";
 import CategorySidebar from "../Components/CategorySidebar";
-import CartSidebar from "../Components/CartSidebar";
 import { useCartStore } from "../store/cart.store";
 
 const UserProductPage = () => {
@@ -14,7 +14,13 @@ const UserProductPage = () => {
   const [loading, setLoading]               = useState(true);
   const [search, setSearch]                 = useState("");
   const [activeCategory, setActiveCategory] = useState<number | null>(null);
+  const navigate = useNavigate();
   const totalItems = useCartStore((s) => s.totalItems());
+
+  // Check if user is Admin
+  const userStr = localStorage.getItem("user");
+  const user = userStr ? JSON.parse(userStr) : null;
+  const isAdmin = user?.role === "Admin";
 
   useEffect(() => {
     const fetchData = async () => {
@@ -80,11 +86,6 @@ const UserProductPage = () => {
             productCounts={productCounts}
           />
         </div>
-
-        {/* Cart summary */}
-        <div style={{ borderTop: "1px solid #111", padding: 12 }}>
-          <CartSidebar />
-        </div>
       </div>
 
       {/* ── MAIN ── */}
@@ -133,25 +134,29 @@ const UserProductPage = () => {
             </div>
 
             {/* Cart badge */}
-            <div style={{
-              position: "relative", width: 38, height: 38,
-              background: "#0a0a0a", border: "1px solid #1a1a1a",
-              borderRadius: 10, display: "flex", alignItems: "center",
-              justifyContent: "center", cursor: "pointer", fontSize: 16,
-              transition: "border 0.2s",
-            }}>
-              🛒
-              {totalItems > 0 && (
-                <span style={{
-                  position: "absolute", top: -4, right: -4,
-                  background: "#7c3aed", color: "#fff",
-                  fontSize: 9, fontWeight: 800,
-                  width: 16, height: 16, borderRadius: "50%",
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  border: "2px solid #050507",
-                }}>{totalItems}</span>
-              )}
-            </div>
+            {!isAdmin && (
+              <div 
+                onClick={() => navigate("/cart")}
+                style={{
+                  position: "relative", width: 38, height: 38,
+                  background: "#0a0a0a", border: "1px solid #1a1a1a",
+                  borderRadius: 10, display: "flex", alignItems: "center",
+                  justifyContent: "center", cursor: "pointer", fontSize: 16,
+                  transition: "border 0.2s",
+                }}>
+                🛒
+                {totalItems > 0 && (
+                  <span style={{
+                    position: "absolute", top: -4, right: -4,
+                    background: "#7c3aed", color: "#fff",
+                    fontSize: 9, fontWeight: 800,
+                    width: 16, height: 16, borderRadius: "50%",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    border: "2px solid #050507",
+                  }}>{totalItems}</span>
+                )}
+              </div>
+            )}
           </div>
         </div>
 

@@ -1,8 +1,10 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/useAuthStore";
+import { useThemeStore } from "../store/useThemeStore";
 
 export default function Navbar() {
   const { isAuthenticated, user, logout } = useAuthStore();
+  const { mode, cycleTheme } = useThemeStore();
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -10,44 +12,66 @@ export default function Navbar() {
     navigate("/");
   };
 
+  const getThemeIcon = () => {
+    switch (mode) {
+      case 'light': return '☀️';
+      case 'midnight': return '🌌';
+      default: return '🌙';
+    }
+  };
+
   return (
-    <nav className="bg-zinc-900/50 backdrop-blur-md border-b border-zinc-800 text-white px-8 py-4 flex justify-between items-center sticky top-0 z-50">
+    <nav className="backdrop-blur-md border-b text-white px-8 py-4 flex justify-between items-center sticky top-0 z-50 transition-colors duration-300" 
+         style={{ backgroundColor: 'var(--bg-secondary)', borderColor: 'var(--border-color)', color: 'var(--text-primary)' }}>
       <Link to="/" className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent transition-transform hover:scale-105">
         ECommerce
       </Link>
-      <div className="flex gap-8 items-center">
-        <Link to="/" className="text-zinc-400 hover:text-white transition-colors">Home</Link>
-        
+      
+      <div className="flex gap-6 items-center">
+        {/* Theme Toggle Button - Always show for accessibility */}
+        <button 
+          onClick={cycleTheme}
+          title={`Theme: ${mode}`}
+          className="p-2.5 rounded-xl border transition-all hover:scale-110 active:scale-95"
+          style={{ backgroundColor: 'var(--bg-primary)', borderColor: 'var(--border-color)', fontSize: '18px' }}
+        >
+          {getThemeIcon()}
+        </button>
+
         {isAuthenticated ? (
-          <>
-            {user?.role === 'Admin' ? (
-              <Link to="/admin" className="text-zinc-400 hover:text-white transition-colors">Admin Panel</Link>
-            ) : (
-              <Link to="/user/dashboard" className="text-zinc-400 hover:text-white transition-colors">Dashboard</Link>
-            )}
-            <div className="flex items-center gap-6 ml-4 pl-6 border-l border-zinc-800">
-              <div className="flex flex-col items-end">
-                <span className="text-zinc-100 font-medium text-sm">{user?.firstName} {user?.lastName}</span>
-                <span className="text-zinc-500 text-[10px] uppercase tracking-wider font-bold">{user?.role}</span>
-              </div>
-              <button 
-                onClick={handleLogout}
-                className="px-6 py-2 bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 rounded-xl text-sm font-semibold transition-all"
-              >
-                Logout
-              </button>
+          /* ONLY Logout and User Name when logged in */
+          <div className="flex items-center gap-6 ml-4 pl-6 border-l" style={{ borderColor: 'var(--border-color)' }}>
+            <div className="flex flex-col items-end">
+              <span className="font-medium text-sm" style={{ color: 'var(--text-primary)' }}>
+                {user?.firstName} {user?.lastName}
+              </span>
+              <span className="text-[10px] uppercase tracking-wider font-bold" style={{ color: 'var(--accent-color)' }}>
+                {user?.role}
+              </span>
             </div>
-          </>
+            <button 
+              onClick={handleLogout}
+              className="px-6 py-2 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 text-red-500 rounded-xl text-sm font-semibold transition-all"
+            >
+              Logout
+            </button>
+          </div>
         ) : (
-          <>
-            <Link to="/auth/login" className="text-zinc-400 hover:text-white transition-colors font-medium">Login</Link>
+          /* Standard Guest Links */
+          <div className="flex items-center gap-6">
+            <Link to="/" className="hover:text-cyan-400 transition-colors" style={{ color: 'var(--text-secondary)' }}>
+              Home
+            </Link>
+            <Link to="/auth/login" className="hover:text-cyan-400 transition-colors font-medium" style={{ color: 'var(--text-secondary)' }}>
+              Login
+            </Link>
             <Link 
               to="/auth/register" 
-              className="px-6 py-2 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 rounded-xl text-sm font-bold transition-all shadow-xl shadow-cyan-900/20"
+              className="px-6 py-2 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 rounded-xl text-sm font-bold transition-all shadow-xl shadow-cyan-900/20 text-white"
             >
               Get Started
             </Link>
-          </>
+          </div>
         )}
       </div>
     </nav>
