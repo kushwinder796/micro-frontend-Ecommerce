@@ -1,8 +1,0 @@
-const HomeApp = () => {
-  return (
-    <div className="min-h-screen flex items-center justify-center">
-      <h1 className="text-3xl font-bold">Welcome to ECommerce</h1>
-    </div>
-  );
-};
-export default HomeApp;
