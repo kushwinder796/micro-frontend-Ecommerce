@@ -33,7 +33,6 @@ const ReceiptPage = () => {
         borderRadius: 24, padding: "40px 36px", textAlign: "center",
       }}>
 
-        {/* Success ring */}
         <div style={{
           width: 80, height: 80, borderRadius: "50%", margin: "0 auto 24px",
           background: "radial-gradient(circle,rgba(34,197,94,0.15),transparent)",

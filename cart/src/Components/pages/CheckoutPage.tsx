@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { useCartStore } from "../store/cart.store";
 import toast from "react-hot-toast";
 
@@ -14,8 +13,8 @@ interface ShippingForm {
 
 const CheckoutPage = () => {
   const { items, totalPrice } = useCartStore();
-  const navigate = useNavigate();
-  const [form, setForm]       = useState<ShippingForm>({
+
+  const [form, setForm] = useState<ShippingForm>({
     fullName: "", email: "", phone: "",
     address: "", city: "", pincode: "",
   });
@@ -25,31 +24,45 @@ const CheckoutPage = () => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setForm({ ...form, [e.target.name]: e.target.value });
 
-  const handlePlaceOrder = async (e: React.FormEvent) => {
+const handlePlaceOrder = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    // ✅ Validation
-    if (!form.fullName || !form.email || !form.phone || !form.address || !form.city || !form.pincode) {
-      toast.error("Please fill all required fields");
-      return;
-    }
-    if (items.length === 0) {
-      toast.error("Your cart is empty!");
-      return;
-    }
 
     setLoading(true);
     try {
       const token = localStorage.getItem("token");
 
+      const orderRes = await fetch("https://localhost:7227/api/Order", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          fullName: form.fullName,
+          email:    form.email,
+          phone:    form.phone,
+          address:  form.address,
+          city:     form.city,
+          pincode:  form.pincode,
+          items:    items.map((i) => ({
+            productId: i.id,
+            quantity:  i.quantity,
+            price:     i.price,
+          })),
+        }),
+      });
+
+      const orderData = await orderRes.json();
+      const realOrderId = orderData.data.id; 
+
       const res = await fetch("https://localhost:7227/api/Payment/create-session", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization:  `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-          orderId:       crypto.randomUUID(),
+          orderId:       realOrderId, 
           customerEmail: form.email,
           currency:      "inr",
           successUrl:    "http://localhost:3000/cart/receipt",
@@ -69,15 +82,17 @@ const CheckoutPage = () => {
         toast.error(data.message || "Payment session failed");
         return;
       }
+
+  
       window.location.href = data.data.url;
 
     } catch (err) {
-      toast.error("Something went wrong");
+      toast.error("Something went wrong. Check backend is running.");
       console.error(err);
     } finally {
       setLoading(false);
     }
-  };
+};
 
   const inputStyle = (field: string): React.CSSProperties => ({
     width: "100%", padding: "11px 14px",
@@ -104,13 +119,10 @@ const CheckoutPage = () => {
 
         {/* Header */}
         <div style={{ marginBottom: 28 }}>
+          {/* ✅ window.location.href instead of navigate */}
           <button
-            onClick={() => navigate("/cart")}
-            style={{
-              background: "none", border: "none", color: "#52525b",
-              fontSize: 13, cursor: "pointer", padding: 0,
-              fontWeight: 600, marginBottom: 10, display: "block",
-            }}
+            onClick={() => window.location.href = "/cart"}
+            className="bg-cyan-400 mb-4"
           >← Back to Cart</button>
           <h1 style={{ fontSize: 26, fontWeight: 800, color: "#fff", margin: 0 }}>
             Checkout
@@ -128,8 +140,9 @@ const CheckoutPage = () => {
               background: "#0a0a0a", border: "1px solid #1a1a1a",
               borderRadius: 16, padding: 24, marginBottom: 16,
             }}>
-              <p style={{ fontSize: 15, fontWeight: 700, color: "#fff", margin: "0 0 20px",
-                display: "flex", alignItems: "center", gap: 8,
+              <p style={{
+                fontSize: 15, fontWeight: 700, color: "#fff",
+                margin: "0 0 20px", display: "flex", alignItems: "center", gap: 8,
               }}>
                 <span>📦</span> Shipping Details
               </p>
@@ -138,74 +151,50 @@ const CheckoutPage = () => {
 
                 <div style={{ gridColumn: "1 / -1" }}>
                   <label style={labelStyle}>Full Name *</label>
-                  <input
-                    name="fullName" value={form.fullName}
+                  <input name="fullName" value={form.fullName}
                     onChange={handleChange}
-                    onFocus={() => setFocused("fullName")}
-                    onBlur={() => setFocused("")}
-                    placeholder="Kushwinder Thakur"
-                    style={inputStyle("fullName")}
-                  />
+                    onFocus={() => setFocused("fullName")} onBlur={() => setFocused("")}
+                    placeholder="" style={inputStyle("fullName")} />
                 </div>
 
                 <div>
                   <label style={labelStyle}>Email *</label>
-                  <input
-                    name="email" type="email" value={form.email}
+                  <input name="email" type="email" value={form.email}
                     onChange={handleChange}
-                    onFocus={() => setFocused("email")}
-                    onBlur={() => setFocused("")}
-                    placeholder="you@email.com"
-                    style={inputStyle("email")}
-                  />
+                    onFocus={() => setFocused("email")} onBlur={() => setFocused("")}
+                    placeholder="" style={inputStyle("email")} />
                 </div>
 
                 <div>
                   <label style={labelStyle}>Phone *</label>
-                  <input
-                    name="phone" value={form.phone}
+                  <input name="phone" value={form.phone}
                     onChange={handleChange}
-                    onFocus={() => setFocused("phone")}
-                    onBlur={() => setFocused("")}
-                    placeholder=""
-                    style={inputStyle("phone")}
-                  />
+                    onFocus={() => setFocused("phone")} onBlur={() => setFocused("")}
+                    placeholder="" style={inputStyle("phone")} />
                 </div>
 
                 <div style={{ gridColumn: "1 / -1" }}>
                   <label style={labelStyle}>Address *</label>
-                  <input
-                    name="address" value={form.address}
+                  <input name="address" value={form.address}
                     onChange={handleChange}
-                    onFocus={() => setFocused("address")}
-                    onBlur={() => setFocused("")}
-                    placeholder="House no, Street, Area"
-                    style={inputStyle("address")}
-                  />
+                    onFocus={() => setFocused("address")} onBlur={() => setFocused("")}
+                    placeholder="" style={inputStyle("address")} />
                 </div>
 
                 <div>
                   <label style={labelStyle}>City *</label>
-                  <input
-                    name="city" value={form.city}
+                  <input name="city" value={form.city}
                     onChange={handleChange}
-                    onFocus={() => setFocused("city")}
-                    onBlur={() => setFocused("")}
-                    placeholder="chd."
-                    style={inputStyle("city")}
-                  />
+                    onFocus={() => setFocused("city")} onBlur={() => setFocused("")}
+                    placeholder="" style={inputStyle("city")} />
                 </div>
 
                 <div>
                   <label style={labelStyle}>Pincode *</label>
-                  <input
-                    name="pincode" value={form.pincode}
+                  <input name="pincode" value={form.pincode}
                     onChange={handleChange}
-                    onFocus={() => setFocused("pincode")}
-                    onBlur={() => setFocused("")}
-                    placeholder="141001"
-                    style={inputStyle("pincode")}
-                  />
+                    onFocus={() => setFocused("pincode")} onBlur={() => setFocused("")}
+                    placeholder="" style={inputStyle("pincode")} />
                 </div>
               </div>
             </div>
@@ -235,10 +224,10 @@ const CheckoutPage = () => {
                     animation: "spin 0.7s linear infinite",
                     display: "inline-block", flexShrink: 0,
                   }} />
-                  Processing...
+                  Connecting to Stripe...
                 </>
               ) : (
-                <> 💳 Pay ₹{totalPrice().toLocaleString()} with Stripe </>
+                <>💳 Pay ₹{totalPrice().toLocaleString()} with Stripe</>
               )}
             </button>
           </form>
@@ -261,16 +250,12 @@ const CheckoutPage = () => {
                     background: "#111", flexShrink: 0, overflow: "hidden",
                   }}>
                     {item.imageUrl ? (
-                      <img
-                        src={item.imageUrl}
-                        alt={item.name}
-                        style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                      />
+                      <img src={item.imageUrl} alt={item.name}
+                        style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                     ) : (
                       <div style={{
-                        width: "100%", height: "100%",
-                        display: "flex", alignItems: "center",
-                        justifyContent: "center", fontSize: 18,
+                        width: "100%", height: "100%", fontSize: 18,
+                        display: "flex", alignItems: "center", justifyContent: "center",
                       }}>📦</div>
                     )}
                   </div>
@@ -309,7 +294,6 @@ const CheckoutPage = () => {
               </div>
             </div>
 
-            {/* Security */}
             <div style={{
               marginTop: 16, padding: "10px 14px", borderRadius: 10,
               background: "rgba(34,197,94,0.05)",
