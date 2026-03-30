@@ -141,7 +141,7 @@ const AdminProductPage = () => {
             <h1 style={{ fontSize: 20, fontWeight: 800, color: "#fff", margin: 0 }}>
               Manage Products
             </h1>
-            <p style={{ fontSize: 12, color: "#3f3f46", margin: "3px 0 0" }}>
+            <p style={{ fontSize: 18, color: "#3f3f46", margin: "3px 0 0" }}>
               {filtered.length} of {products.length} products
               {activeCategory !== null && " · filtered"}
             </p>
@@ -160,7 +160,7 @@ const AdminProductPage = () => {
               style={{
                 paddingLeft: 36, paddingRight: 14, paddingTop: 9, paddingBottom: 9,
                 background: "#0a0a0a", border: "1px solid #1a1a1a",
-                borderRadius: 10, color: "#fff", fontSize: 13, outline: "none",
+                borderRadius: 10, color: "#fff", fontSize: 20, outline: "none",
                 width: 220, transition: "border 0.2s",
               }}
               onFocus={(e) => e.currentTarget.style.borderColor = "#6d28d9"}

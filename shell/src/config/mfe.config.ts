@@ -3,9 +3,9 @@
 export const MFE = {
   shell:    import.meta.env.VITE_SHELL_URL    ?? "http://localhost:3000",
   auth:     import.meta.env.VITE_AUTH_URL     ?? "http://localhost:3001",
-//   home:     import.meta.env.VITE_HOME_URL     ?? "http://localhost:3002",
-//   cart:     import.meta.env.VITE_CART_URL     ?? "http://localhost:3003",
-//   payment:  import.meta.env.VITE_PAYMENT_URL  ?? "http://localhost:3004",
+  // home:     import.meta.env.VITE_HOME_URL     ?? "http://localhost:3002",
+  cart:     import.meta.env.VITE_CART_URL     ?? "http://localhost:3004",
+  // payment:  import.meta.env.VITE_PAYMENT_URL  ?? "http://localhost:3004",
    products: import.meta.env.VITE_PRODUCTS_URL ?? "http://localhost:3003",
 } as const;
 

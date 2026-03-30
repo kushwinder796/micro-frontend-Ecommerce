@@ -11,7 +11,6 @@ export default defineConfig({
       name: "shell",
       remotes: {
         "authApp":       "http://localhost:3001/assets/remoteEntry.js",
-        // "homeApp":       "http://localhost:3002/assets/remoteEntry.js",
         "productsApp":   "http://localhost:3003/assets/remoteEntry.js",
         "cartApp":       "http://localhost:3004/assets/remoteEntry.js",
        "paymentApp":     "http://localhost:3005/assets/remoteEntry.js",

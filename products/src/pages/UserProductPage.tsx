@@ -106,7 +106,7 @@ const UserProductPage = () => {
                 : "All Products"
               }
             </h1>
-            <p style={{ fontSize: 12, color: "#3f3f46", margin: "3px 0 0" }}>
+            <p style={{ fontSize: 18, color: "#3f3f46", margin: "3px 0 0" }}>
               {filtered.length} products available
             </p>
           </div>
@@ -125,7 +125,7 @@ const UserProductPage = () => {
                 style={{
                   paddingLeft: 36, paddingRight: 14, paddingTop: 9, paddingBottom: 9,
                   background: "#0a0a0a", border: "1px solid #1a1a1a",
-                  borderRadius: 10, color: "#fff", fontSize: 13, outline: "none",
+                  borderRadius: 10, color: "#fff", fontSize: 20, outline: "none",
                   width: 200, transition: "border 0.2s",
                 }}
                 onFocus={(e) => e.currentTarget.style.borderColor = "#0891b2"}
@@ -138,9 +138,9 @@ const UserProductPage = () => {
               <div 
                 onClick={() => navigate("/cart")}
                 style={{
-                  position: "relative", width: 38, height: 38,
+                  position: "relative", width: 45, height: 45,
                   background: "#0a0a0a", border: "1px solid #1a1a1a",
-                  borderRadius: 10, display: "flex", alignItems: "center",
+                  borderRadius: 12, display: "flex", alignItems: "center",
                   justifyContent: "center", cursor: "pointer", fontSize: 16,
                   transition: "border 0.2s",
                 }}>

@@ -96,7 +96,7 @@ const ReceiptPage = () => {
               border: "1px solid #27272a", background: "transparent",
               color: "#71717a", fontSize: 13, fontWeight: 600, cursor: "pointer",
             }}
-          >🖨️ Print Receipt</button>
+          >Print Receipt</button>
         </div>
       </div>
 

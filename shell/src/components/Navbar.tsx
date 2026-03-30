@@ -27,7 +27,7 @@ export default function Navbar() {
         ECommerce
       </Link>
       
-      <div className="flex gap-6 items-center">
+      <div className="flex gap-4 items-center">
         {/* Theme Toggle Button - Always show for accessibility */}
         <button 
           onClick={cycleTheme}
