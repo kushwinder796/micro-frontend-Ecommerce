@@ -52,10 +52,11 @@ const ProductCard = ({ product, categoryName }: Props) => {
 
         {/* Stock badge */}
         <div
-          className={`absolute top-3 right-3 px-2 py-1 rounded-lg text-xs font-bold backdrop-blur-sm ${stock > 0
+          className={`absolute top-3 right-3 px-2 py-1 rounded-lg text-xs font-bold backdrop-blur-sm ${
+            stock > 0
               ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
               : "bg-red-500/20 text-red-400 border border-red-500/30"
-            }`}
+          }`}
         >
           {stock > 0 ? `${stock} in stock` : "Out of stock"}
         </div>
@@ -69,6 +70,24 @@ const ProductCard = ({ product, categoryName }: Props) => {
         <h3 className="text-white font-bold text-base mb-1 line-clamp-1">
           {product.name}
         </h3>
+
+        {/* Star Rating Display */}
+        <div className="flex items-center gap-0.5 mb-2">
+          {[1, 2, 3, 4, 5].map((star) => {
+            const mockRating = (product.name.length % 3) + 3;
+            return (
+              <svg
+                key={star}
+                className={"w-3 h-3 "}
+                fill={star <= mockRating ? "#facc15" : "#d1d5db"}
+                viewBox="0 0 20 20"
+              >
+                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.962a1 1 0 00.95.69h4.162c.969 0 1.371 1.24.588 1.81l-3.366 2.445a1 1 0 00-.364 1.118l1.286 3.962c.3.921-.755 1.688-1.54 1.118l-3.366-2.445a1 1 0 00-1.175 0l-3.366 2.445c-.784.57-1.838-.197-1.539-1.118l1.286-3.962a1 1 0 00-.364-1.118L2.98 9.389c-.783-.57-.38-1.81.588-1.81h4.162a1 1 0 00.951-.69l1.368-3.962z" />
+              </svg>
+            );
+          })}
+        </div>
+
         <div className="flex items-baseline gap-2 mb-4">
           <span className="text-2xl font-extrabold text-white">
             ₹{product.price.toLocaleString()}
