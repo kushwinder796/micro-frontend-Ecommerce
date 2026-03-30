@@ -1,5 +1,6 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
+import LogoMarquee from './LogoMarquee';
+import AIChatBox from './AIChatBox';
 
 const LandingPage: React.FC = () => {
   return (
@@ -57,6 +58,19 @@ const LandingPage: React.FC = () => {
           </div>
         </div>
       </div>
+      
+      {/* Dynamic Logo Marquee section */}
+      <div className="mt-20 sm:mt-32 border-t border-zinc-800">
+        <div className="mx-auto max-w-7xl px-6 lg:px-8 py-10">
+          <p className="text-center text-sm font-semibold leading-8 text-zinc-500 uppercase tracking-[0.2em] mb-12">
+            Trusted by Industry Leaders
+          </p>
+          <LogoMarquee />
+        </div>
+      </div>
+
+      {/* Interactive AI Chat Box */}
+      <AIChatBox />
     </div>
   );
 };
