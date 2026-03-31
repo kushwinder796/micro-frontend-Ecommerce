@@ -1,10 +1,11 @@
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCartStore } from "../store/cart.store";
+import toast from "react-hot-toast";
 
 const ReceiptPage = () => {
   const { clearCart } = useCartStore();
-  const navigate      = useNavigate();
+  const navigate = useNavigate();
 
   const [orderId] = useState(() =>
     new URLSearchParams(window.location.search).get("orderId") || "ORD-" + Date.now()
@@ -13,12 +14,37 @@ const ReceiptPage = () => {
     new URLSearchParams(window.location.search).get("session_id") || ""
   );
 
+  const [shippingAddress] = useState(() => localStorage.getItem("shippingAddress") || "India");
+  const [shippingMap] = useState(() => localStorage.getItem("shippingMap") || "");
+  const [shippingDate] = useState(() => {
+    const date = new Date();
+    date.setDate(date.getDate() + 3);
+    return date.toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" });
+  });
+
   const handleClear = useCallback(() => {
     clearCart();
   }, [clearCart]);
 
   useEffect(() => {
     handleClear();
+
+    // Trigger confirmation messages
+    const email = localStorage.getItem("shippingEmail");
+    const phone = localStorage.getItem("shippingPhone");
+
+    if (email || phone) {
+      setTimeout(() => {
+        toast.success(
+          `Order confirmation sent!\n📧 ${email || "N/A"}\n📱 ${phone || "N/A"}`,
+          {
+            duration: 5000,
+            style: { background: "#0a0a0a", color: "#fff", border: "1px solid #27272a", fontSize: 14 },
+            icon: "🚀"
+          }
+        );
+      }, 1000);
+    }
   }, [handleClear]);
 
   return (
@@ -42,10 +68,10 @@ const ReceiptPage = () => {
         }}>✅</div>
 
         <h1 style={{ fontSize: 24, fontWeight: 800, color: "#fff", margin: "0 0 8px" }}>
-          Payment Successful!
+          Your order is successfully done!
         </h1>
         <p style={{ fontSize: 14, color: "#52525b", margin: "0 0 32px" }}>
-          Your order has been placed. You'll receive a confirmation email shortly.
+          Your order has been placed successfully. Your expected shipping date is {shippingDate}.
         </p>
 
         {/* Receipt */}
@@ -60,11 +86,11 @@ const ReceiptPage = () => {
           }}>Receipt</p>
 
           {[
-            { label: "Order ID",  value: orderId },
-            { label: "Session",   value: sessionId ? sessionId.slice(0, 20) + "..." : "N/A" },
-            { label: "Date",      value: new Date().toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" }) },
-            { label: "Payment",   value: "Stripe · Paid ✅" },
-            { label: "Delivery",  value: "3–5 Business Days" },
+            { label: "Order ID", value: orderId },
+            { label: "Session", value: sessionId ? sessionId.slice(0, 20) + "..." : "N/A" },
+            { label: "Date", value: new Date().toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" }) },
+            { label: "Payment", value: "Stripe · Paid ✅" },
+            { label: "Shipping Date", value: shippingDate },
           ].map((row) => (
             <div key={row.label} style={{
               display: "flex", justifyContent: "space-between",
@@ -75,6 +101,36 @@ const ReceiptPage = () => {
               <span style={{ fontSize: 12, color: "#fff", fontWeight: 600 }}>{row.value}</span>
             </div>
           ))}
+        </div>
+
+        {/* Delivery Map Section */}
+        <div style={{
+          background: "#050507", border: "1px solid #1a1a1a",
+          borderRadius: 14, padding: "18px 20px",
+          marginBottom: 28, textAlign: "left",
+        }}>
+          <p style={{
+            fontSize: 10, fontWeight: 700, color: "#3f3f46",
+            textTransform: "uppercase", letterSpacing: 1.5, margin: "0 0 14px",
+            display: "flex", justifyContent: "space-between"
+          }}>
+            <span>Delivery Location</span>
+            <span style={{ color: "#22c55e" }}>📍 {shippingAddress.slice(0, 25)}{shippingAddress.length > 25 ? "..." : ""}</span>
+          </p>
+          <div style={{
+            width: "100%", height: 180, borderRadius: 10, overflow: "hidden",
+            border: "1px solid #1a1a1a", background: "#111"
+          }}>
+            <iframe
+              width="100%"
+              height="100%"
+              style={{ border: 0 }}
+              loading="lazy"
+              allowFullScreen
+              referrerPolicy="no-referrer-when-downgrade"
+              src={shippingMap || `https://maps.google.com/maps?q=${encodeURIComponent(shippingAddress)}&t=&z=13&ie=UTF8&iwloc=&output=embed`}
+            />
+          </div>
         </div>
 
         {/* Actions */}

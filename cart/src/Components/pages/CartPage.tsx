@@ -51,6 +51,10 @@ const CartPage = () => {
     );
   }
 
+  // Calculate discount and final price
+  const subtotal = totalPrice();
+ 
+
   return (
     <div
       style={{
@@ -72,10 +76,11 @@ const CartPage = () => {
           <div>
             <button
               onClick={() => navigate("/user/dashboard")}
-              className="bg-cyan-400"
+              className="bg-cyan-400 mb-4 "
             >
               ← Continue Shopping
             </button>
+
             <h1
               style={{
                 fontSize: 26,
@@ -86,6 +91,7 @@ const CartPage = () => {
             >
               Your Cart
             </h1>
+
             <p style={{ fontSize: 13, color: "#52525b", margin: "4px 0 0" }}>
               {items.length} item{items.length > 1 ? "s" : ""}
             </p>
@@ -180,18 +186,6 @@ const CartPage = () => {
                     }}
                   >
                     {item.name}
-                  </p>
-                  <p
-                    style={{
-                      fontSize: 12,
-                      color: "#52525b",
-                      margin: "4px 0 10px",
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                      whiteSpace: "nowrap",
-                    }}
-                  >
-                    {item.description || "No description"}
                   </p>
                   <p
                     style={{
@@ -350,7 +344,7 @@ const CartPage = () => {
               >
                 <span style={{ fontSize: 13, color: "#71717a" }}>Subtotal</span>
                 <span style={{ fontSize: 13, color: "#fff", fontWeight: 600 }}>
-                  ₹{totalPrice().toLocaleString()}
+                  ₹{subtotal.toLocaleString()}
                 </span>
               </div>
               <div
@@ -367,21 +361,38 @@ const CartPage = () => {
                   FREE
                 </span>
               </div>
+
+
               <div
                 style={{
                   display: "flex",
                   justifyContent: "space-between",
                   marginBottom: 20,
+                  alignItems: "flex-end",
+                  gap: 12,
                 }}
               >
                 <span style={{ fontSize: 17, fontWeight: 800, color: "#fff" }}>
                   Total
                 </span>
-                <span
-                  style={{ fontSize: 19, fontWeight: 800, color: "#a855f7" }}
-                >
+                <div style={{ textAlign: "right" }}>
+                  <div
+                    style={{
+                      fontSize: 14,
+                      fontWeight: 600,
+                      color: "#71717a",
+                      textDecoration: "line-through",
+                      marginBottom: 4,
+                    }}
+                  >
+                    ₹{subtotal.toLocaleString()}
+                  </div>
+                  <span
+                    style={{ fontSize: 19, fontWeight: 800, color: "#a855f7" }}
+                  >
                   ₹{totalPrice().toLocaleString()}
-                </span>
+                  </span>
+                </div>
               </div>
 
               <button
