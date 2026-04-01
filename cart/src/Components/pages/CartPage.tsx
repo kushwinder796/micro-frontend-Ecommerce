@@ -50,9 +50,6 @@ const CartPage = () => {
       </div>
     );
   }
-
-  // Calculate discount and final price
-  const subtotal = totalPrice();
  
 
   return (
@@ -335,18 +332,7 @@ const CartPage = () => {
             </div>
 
             <div style={{ borderTop: "1px solid #1a1a1a", paddingTop: 14 }}>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  marginBottom: 8,
-                }}
-              >
-                <span style={{ fontSize: 13, color: "#71717a" }}>Subtotal</span>
-                <span style={{ fontSize: 13, color: "#fff", fontWeight: 600 }}>
-                  ₹{subtotal.toLocaleString()}
-                </span>
-              </div>
+
               <div
                 style={{
                   display: "flex",
@@ -376,17 +362,6 @@ const CartPage = () => {
                   Total
                 </span>
                 <div style={{ textAlign: "right" }}>
-                  <div
-                    style={{
-                      fontSize: 14,
-                      fontWeight: 600,
-                      color: "#71717a",
-                      textDecoration: "line-through",
-                      marginBottom: 4,
-                    }}
-                  >
-                    ₹{subtotal.toLocaleString()}
-                  </div>
                   <span
                     style={{ fontSize: 19, fontWeight: 800, color: "#a855f7" }}
                   >
