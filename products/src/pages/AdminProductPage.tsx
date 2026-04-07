@@ -177,7 +177,7 @@ const AdminProductPage = () => {
           {[
             { label: "Total Products", value: products.length, color: "#7c3aed" },
             { label: "Categories",     value: categories.length, color: "#0891b2" },
-            //{ label: "In Stock",       value: products.filter(p => (p.stock ?? 0) > 0).length, color: "#22c55e" },
+            
           ].map((stat) => (
             <div key={stat.label} style={{
               flex: 1, padding: "10px 14px", borderRadius: 10,

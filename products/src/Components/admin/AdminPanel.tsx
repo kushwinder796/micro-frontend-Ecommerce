@@ -83,7 +83,7 @@ const AdminPanel = ({ categories, products, onSuccess }: Props) => {
           background: "#09090b",
           border: "1px solid #27272a",
           borderRadius: 12,
-          // width:"100%"
+         
         }}
       >
         {(["category", "product"] as const).map((tab) => (
@@ -109,22 +109,18 @@ const AdminPanel = ({ categories, products, onSuccess }: Props) => {
               alignItems: "center",
               justifyContent: "center",
               gap: 6,
-              whiteSpace: "nowrap", 
+              whiteSpace: "nowrap",
             }}
           >
-            {
-              tab === "category" ? (
-                <>
-                  {/* <span>📁</span> */}
-                  <span>Category</span>
-                </> 
-              ) : (
-                <>
-                  {/* <span>📦</span> */}
-                  <span>Product</span>
-                </>
-              ) 
-            }
+            {tab === "category" ? (
+              <>
+                <span>Category</span>
+              </>
+            ) : (
+              <>
+                <span>Product</span>
+              </>
+            )}
           </button>
         ))}
       </div>

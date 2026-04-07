@@ -13,44 +13,62 @@ const CartPage = () => {
   const navigate = useNavigate();
 
   if (items.length === 0) {
-    return (
-      <div
+  return (
+    <div
+      style={{
+        minHeight: "100dvh",
+        width: "100%",
+        background: "#050507",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: 16,
+        textAlign: "center",
+        fontFamily: "'DM Sans', sans-serif",
+        position: "relative",
+      }}
+    >
+      <button
+        onClick={() => navigate("/user/dashboard")}
+        className="bg-cyan-400 mb-4 "
         style={{
-          minHeight: "100dvh",
-          width: "100%",
-          background: "#050507",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          gap: 16,
-          textAlign: "center",
-          fontFamily: "'DM Sans', sans-serif",
+          position: "absolute",
+          top: "20px",
+          right: "20px",
+          padding: "8px 16px",
+          borderRadius: "8px",
+          border: "none",
+          cursor: "pointer",
         }}
       >
-        <div
-          style={{
-            width: 90,
-            height: 90,
-            borderRadius: 24,
-            background: "#0a0a0a",
-            border: "1px solid #1a1a1a",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            fontSize: 38,
-          }}
-        >
-          🛒
-        </div>
-        <p style={{ color: "#fff", fontSize: 20, fontWeight: 800, margin: 0 }}>
-          Your cart is empty
-        </p>
-        <style>{`@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700;800&display=swap');`}</style>
+        ← Continue Shopping
+      </button>
+
+      <div
+        style={{
+          width: 90,
+          height: 90,
+          borderRadius: 24,
+          background: "#0a0a0a",
+          border: "1px solid #1a1a1a",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          fontSize: 38,
+        }}
+      >
+        🛒
       </div>
-    );
-  }
- 
+
+      <p style={{ color: "#fff", fontSize: 20, fontWeight: 800, margin: 0 }}>
+        Your cart is empty
+      </p>
+
+      <style>{`@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700;800&display=swap');`}</style>
+    </div>
+  );
+}
 
   return (
     <div
@@ -332,7 +350,6 @@ const CartPage = () => {
             </div>
 
             <div style={{ borderTop: "1px solid #1a1a1a", paddingTop: 14 }}>
-
               <div
                 style={{
                   display: "flex",
@@ -347,7 +364,6 @@ const CartPage = () => {
                   FREE
                 </span>
               </div>
-
 
               <div
                 style={{
@@ -365,7 +381,7 @@ const CartPage = () => {
                   <span
                     style={{ fontSize: 19, fontWeight: 800, color: "#a855f7" }}
                   >
-                  ₹{totalPrice().toLocaleString()}
+                    ₹{totalPrice().toLocaleString()}
                   </span>
                 </div>
               </div>
