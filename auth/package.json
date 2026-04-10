@@ -13,6 +13,7 @@
     "@originjs/vite-plugin-federation": "^1.4.1",
     "@tailwindcss/vite": "^4.2.1",
     "axios": "^1.13.6",
+    "jwt-decode": "^4.0.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-hot-toast": "^2.6.0",

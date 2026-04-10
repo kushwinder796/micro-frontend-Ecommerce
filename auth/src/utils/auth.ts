@@ -1,9 +1,19 @@
+import { decodeToken } from "./jwt";
+
 const TOKEN_KEY = "mfe_token";
 const USER_KEY  = "mfe_user";
 
 export function saveAuth(token: string, user: object) {
+  const decoded = decodeToken(token);
+
+  const userWithId = {
+    ...user,
+    id: decoded?.userId, 
+    role: decoded?.role, 
+  };
+
   localStorage.setItem(TOKEN_KEY, token);
-  localStorage.setItem(USER_KEY, JSON.stringify(user));
+  localStorage.setItem(USER_KEY, JSON.stringify(userWithId));
 }
 
 export function getToken(): string | null {

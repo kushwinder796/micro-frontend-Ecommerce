@@ -16,6 +16,7 @@ export interface UserDto {
     lastName: string;
     email: string;
     role: string;
+    userId: string ;
 }
 
 export interface LoginDto {

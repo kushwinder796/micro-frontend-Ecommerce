@@ -1,16 +1,22 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
+import { useChatStore } from '../store/useChatStore';
+import { useAuthStore } from '../store/useAuthStore';
+import { signalRService } from '../api/signalrService';
 
 const AIChatBox: React.FC = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState<{ text: string; sender: 'user' | 'ai' }[]>([
-    { text: 'Hello! How can I help you today?', sender: 'ai' },
-  ]);
+  const { messages, isOpen, setIsOpen } = useChatStore();
+  const { user } = useAuthStore();
+  
   const [inputValue, setInputValue] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [sessionId] = useState(() => `session_${Date.now()}`);
+  const [activeProduct, setActiveProduct] = useState<{ id: string; name: string; price: number | string } | null>(null);
   const chatEndRef = useRef<HTMLDivElement>(null);
 
-  const BACKEND_URL = 'https://localhost:7227/api/chat/send';
+  // Filter messages for this user session (if they are logged in, use their ID, else mock an anonymous session)
+  const currentUserId = user?.id || 'anonymous-user';
+  
+  const userMessages = useMemo(() => {
+    return messages.filter(m => m.senderId === currentUserId || m.targetUserId === currentUserId);
+  }, [messages, currentUserId]);
 
   const scrollToBottom = () => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -18,49 +24,40 @@ const AIChatBox: React.FC = () => {
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages, isOpen]);
+  }, [userMessages, isOpen]);
 
-  const handleSendMessage = async (e: React.FormEvent) => {
+  useEffect(() => {
+    const handleOpenChatProduct = (e: CustomEvent) => {
+      setActiveProduct(e.detail);
+      setIsOpen(true);
+    };
+    window.addEventListener('open-chat-product', handleOpenChatProduct as EventListener);
+    return () => window.removeEventListener('open-chat-product', handleOpenChatProduct as EventListener);
+  }, [setIsOpen]);
+
+  const handleSendMessage = (e: React.FormEvent) => {
+
     e.preventDefault();
-    if (!inputValue.trim() || isLoading) return;
+    const convId = useChatStore.getState().activeConversationId;
+    if (!inputValue.trim()) return;
+  
+    signalRService.sendMessage({
+      conversationId: convId || undefined,
+      senderId: currentUserId,
+      senderName: user?.firstName ? `${user.firstName} ${user.lastName}` : 'Guest',
+      text: inputValue,
+      role: 'User',
+      productInfo: activeProduct
+      ? {
+          id: activeProduct.id,
+          name: activeProduct.name,
+          price: Number(activeProduct.price), 
+        }
+      : undefined,
+    });
     
-    const userMessage = inputValue;
-    setMessages((prev) => [...prev, { text: userMessage, sender: 'user' }]);
     setInputValue('');
-    setIsLoading(true);
-    try {
-      const response = await fetch(BACKEND_URL, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          message: userMessage,
-          sessionId: sessionId,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const data = await response.json();
-      setMessages((prev) => [
-        ...prev,
-        { text: data.response, sender: 'ai' },
-      ]);
-    } catch (error) {
-      console.error('Error:', error);
-      setMessages((prev) => [
-        ...prev,
-        { 
-          text: 'Sorry, I encountered an error. Please try again.', 
-          sender: 'ai' 
-        },
-      ]);
-    } finally {
-      setIsLoading(false);
-    }
+    setActiveProduct(null); // Clear active product after sending
   };
 
   return (
@@ -70,7 +67,7 @@ const AIChatBox: React.FC = () => {
           <div className="p-4 border-b border-zinc-700 bg-cyan-600 flex justify-between items-center">
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></div>
-              <span className="font-bold text-white uppercase text-xs">AI Assistant</span>
+              <span className="font-bold text-white uppercase text-xs">Chatting..</span>
             </div>
             <button 
               onClick={() => setIsOpen(false)}
@@ -81,27 +78,49 @@ const AIChatBox: React.FC = () => {
           </div>
           
           <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-zinc-950/50">
-            {messages.map((msg, index) => (
-              <div key={index} className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
-                <div className={`max-w-[80%] rounded-xl px-4 py-2 text-sm ${
-                  msg.sender === 'user'
-                    ? 'bg-cyan-600 text-white'
-                    : 'bg-zinc-800 text-zinc-300 border border-zinc-700'
-                }`}>
-                  {msg.text}
-                </div>
+            {activeProduct && (
+              <div className="text-center text-xs text-cyan-400 font-bold mb-2 p-2 bg-cyan-900/20 rounded border border-cyan-500/30">
+                You are asking about: {activeProduct.name}
               </div>
-            ))}
-            {isLoading && (
-              <div className="flex justify-start">
-                <div className="bg-zinc-800 border border-zinc-700 rounded-xl px-4 py-2">
-                  <div className="flex gap-1">
-                    <div className="w-2 h-2 bg-zinc-500 rounded-full animate-bounce"></div>
-                    <div className="w-2 h-2 bg-zinc-500 rounded-full animate-bounce" style={{animationDelay: '150ms'}}></div>
-                    <div className="w-2 h-2 bg-zinc-500 rounded-full animate-bounce" style={{animationDelay: '300ms'}}></div>
+            )}
+            
+            {userMessages.length === 0 ? (
+              <div className="text-center text-zinc-500 text-sm mt-4">
+                Hello! How can we help you today?
+              </div>
+            ) : (
+              userMessages.map((msg) => (
+                <div key={msg.id} className={`flex ${msg.role === 'User' ? 'justify-end' : 'justify-start'}`}>
+                  <div className={`max-w-[80%] rounded-xl px-4 py-2 text-sm ${
+                    msg.role === 'User'
+                      ? 'bg-cyan-600 text-white'
+                      : 'bg-zinc-800 text-zinc-300 border border-zinc-700'
+                  }`}>
+                    {msg.role === 'Admin' && <div className="text-xs opacity-50 mb-1">{msg.senderName}</div>}
+                    
+                    {msg.productInfo && (
+                      <div className="mb-2 p-2 bg-zinc-900/50 rounded border border-zinc-700 border-l-2 border-l-emerald-500 text-xs text-left">
+                        <div className="font-bold text-emerald-400 mb-1">Inquiring about:</div>
+                        <div className="text-white font-medium">{msg.productInfo.name}</div>
+                        <div className="text-emerald-400 font-bold mt-1">₹{msg.productInfo.price}</div>
+                      </div>
+                    )}
+                    
+                    <div className="text-left">{msg.text}</div>
+                    
+                    {msg.role === 'User' && (
+                      <div className="text-[10px] text-right mt-1 opacity-80 flex justify-end items-center gap-1">
+                        {msg.status === 'read' ? (
+                          <span className="text-blue-400 font-bold tracking-tighter shrink-0" title="Read">✓✓</span>
+                        ) : (
+                          <span className="text-zinc-300 font-bold shrink-0" title="Sent">✓</span>
+                        )}
+                        <span>{new Date(msg.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
+                      </div>
+                    )}
                   </div>
                 </div>
-              </div>
+              ))
             )}
             <div ref={chatEndRef} />
           </div>
@@ -112,12 +131,10 @@ const AIChatBox: React.FC = () => {
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               placeholder="Ask anything..."
-              disabled={isLoading}
-              className="flex-1 bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:ring-1 focus:ring-cyan-500 disabled:opacity-50"
+              className="flex-1 bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:ring-1 focus:ring-cyan-500"
             />
             <button 
               type="submit"
-              disabled={isLoading}
               className="bg-cyan-600 hover:bg-cyan-500 text-white rounded-lg px-3 py-2"
             >
               →

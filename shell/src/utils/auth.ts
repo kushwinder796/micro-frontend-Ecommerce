@@ -1,5 +1,5 @@
-const TOKEN_KEY = "mfe_token";
-const USER_KEY  = "mfe_user";
+const TOKEN_KEY = "token";
+const USER_KEY  = "user";
 
 export function saveAuth(token: string, user: object) {
   localStorage.setItem(TOKEN_KEY, token);
@@ -7,11 +7,11 @@ export function saveAuth(token: string, user: object) {
 }
 
 export function getToken(): string | null {
-  return localStorage.getItem(TOKEN_KEY);
+  return localStorage.getItem(TOKEN_KEY) || localStorage.getItem("mfe_token");
 }
 
 export function getUser() {
-  const raw = localStorage.getItem(USER_KEY);
+  const raw = localStorage.getItem(USER_KEY) || localStorage.getItem("mfe_user");
   return raw ? JSON.parse(raw) : null;
 }
 
