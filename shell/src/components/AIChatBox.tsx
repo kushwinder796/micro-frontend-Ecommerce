@@ -1,30 +1,63 @@
+
+
 import React, { useState, useRef, useEffect, useMemo } from 'react';
-import { useChatStore } from '../store/useChatStore';
+import { useChatStore,  } from '../store/useChatStore';
 import { useAuthStore } from '../store/useAuthStore';
 import { signalRService } from '../api/signalrService';
+
 
 const AIChatBox: React.FC = () => {
   const { messages, isOpen, setIsOpen } = useChatStore();
   const { user } = useAuthStore();
-  
+  const convId = useChatStore(state => state.activeConversationId);
   const [inputValue, setInputValue] = useState('');
   const [activeProduct, setActiveProduct] = useState<{ id: string; name: string; price: number | string } | null>(null);
   const chatEndRef = useRef<HTMLDivElement>(null);
 
-  // Filter messages for this user session (if they are logged in, use their ID, else mock an anonymous session)
   const currentUserId = user?.id || 'anonymous-user';
-  
+
   const userMessages = useMemo(() => {
-    return messages.filter(m => m.senderId === currentUserId || m.targetUserId === currentUserId);
-  }, [messages, currentUserId]);
+    
+    if (convId) return messages.filter(m=>m.conversationId=== convId);
+
+    return messages.filter(m => m.senderId === currentUserId);
+  }, [messages, currentUserId,convId]);
 
   const scrollToBottom = () => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
+
+
+
+const handleSendMessage = (e: React.FormEvent) => {
+  e.preventDefault();
+  if (!inputValue.trim()) return;
+
+  signalRService.sendMessage({
+    conversationId: useChatStore.getState().activeConversationId || undefined,
+    senderId: currentUserId,
+    senderName: user?.firstName ? `${user.firstName} ${user.lastName}` : 'Guest',
+    text: inputValue,
+    role: 'User',
+    productInfo: activeProduct
+      ? { id: activeProduct.id, name: activeProduct.name, price: Number(activeProduct.price) }
+      : undefined,
+  });
+
+  setInputValue('');
+  setActiveProduct(null);
+};
   useEffect(() => {
     scrollToBottom();
   }, [userMessages, isOpen]);
+
+
+useEffect(() => {
+  if (convId) {
+    signalRService.joinConversation(convId);
+  }
+}, [convId]);
 
   useEffect(() => {
     const handleOpenChatProduct = (e: CustomEvent) => {
@@ -35,30 +68,8 @@ const AIChatBox: React.FC = () => {
     return () => window.removeEventListener('open-chat-product', handleOpenChatProduct as EventListener);
   }, [setIsOpen]);
 
-  const handleSendMessage = (e: React.FormEvent) => {
 
-    e.preventDefault();
-    const convId = useChatStore.getState().activeConversationId;
-    if (!inputValue.trim()) return;
-  
-    signalRService.sendMessage({
-      conversationId: convId || undefined,
-      senderId: currentUserId,
-      senderName: user?.firstName ? `${user.firstName} ${user.lastName}` : 'Guest',
-      text: inputValue,
-      role: 'User',
-      productInfo: activeProduct
-      ? {
-          id: activeProduct.id,
-          name: activeProduct.name,
-          price: Number(activeProduct.price), 
-        }
-      : undefined,
-    });
-    
-    setInputValue('');
-    setActiveProduct(null); // Clear active product after sending
-  };
+
 
   return (
     <div className="fixed bottom-6 right-6 z-50">

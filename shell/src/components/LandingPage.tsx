@@ -68,8 +68,7 @@ const LandingPage: React.FC = () => {
           <LogoMarquee />
         </div>
       </div>
-
-      {/* Interactive AI Chat Box */}
+      
       <AIChatBox />
     </div>
   );

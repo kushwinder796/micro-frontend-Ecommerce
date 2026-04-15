@@ -6,6 +6,7 @@ export interface ChatMessage {
   senderId: string | undefined;
   senderName: string;
   text: string;
+  tempId?: string; 
   timestamp: string;
   role: 'User' | 'Admin';
   productInfo?: {
@@ -23,7 +24,7 @@ export interface ChatMessage {
 
 interface ChatState {
   messages: ChatMessage[];
-  addMessage: (message: Omit<ChatMessage, 'id'>) => void;
+  addMessage: (message:ChatMessage) => void;
   clearMessages: () => void;
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
@@ -32,7 +33,7 @@ interface ChatState {
   activeConversationId: string | null;
   setActiveConversationId: (id: string | null) => void;
   setMessages: (messages: ChatMessage[]) => void;
-  markMessagesAsRead: (userId: string) => void;
+  markMessagesAsRead: (conversationId: string) => void;
 }
 
 export const useChatStore = create<ChatState>()(
@@ -56,9 +57,9 @@ export const useChatStore = create<ChatState>()(
           },
         ],
       })),
-      markMessagesAsRead: (userId) => set((state) => ({
+      markMessagesAsRead: (conversationId: string) => set((state) => ({
         messages: state.messages.map(msg =>
-          msg.senderId === userId && msg.role === 'User'
+          msg.conversationId === conversationId && msg.role === 'User'
             ? { ...msg, status: 'read' as const }
             : msg
         )

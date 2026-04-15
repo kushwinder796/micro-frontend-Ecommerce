@@ -1,9 +1,10 @@
-import React, { useState, useMemo } from "react";
+
+import React, { useState, useMemo, useEffect } from "react";
 import { useChatStore, type ChatMessage } from "../store/useChatStore";
 import { signalRService } from "../api/signalrService";
 import axios from "axios";
 import { getToken, getUser } from "../utils/auth";
- // adjust path
+// adjust path
 
 type BackendMessage = {
   id?: string;
@@ -29,10 +30,14 @@ type BackendConversation = {
 };
 
 const AdminChatDashboard: React.FC = () => {
-  const { messages, markMessagesAsRead, setIsAdminChatOpen, activeConversationId } = useChatStore();
-const adminUser = getUser();
-const token = getToken();
-
+  const {
+    messages,
+    markMessagesAsRead,
+    setIsAdminChatOpen,
+    activeConversationId,
+  } = useChatStore();
+  const adminUser = getUser();
+  const token = getToken();
 
   const conversations = useMemo(() => {
     const groups = new Map<string, ChatMessage[]>();
@@ -58,6 +63,7 @@ const token = getToken();
       };
     });
   }, [messages]);
+  const convId = useChatStore(state => state.activeConversationId);
 
   React.useEffect(() => {
     const fetchAllConversations = async () => {
@@ -65,7 +71,6 @@ const token = getToken();
         console.log("Fetching conversations from backend...");
 
         const response = await axios.get<BackendConversation[]>(
-          
           `${import.meta.env.VITE_API_URL || "https://localhost:7227"}/api/Conversation/all`,
           {
             headers: { Authorization: `Bearer ${token}` },
@@ -86,7 +91,9 @@ const token = getToken();
               m.senderId &&
               m.senderId !== "00000000-0000-0000-0000-000000000000"
                 ? m.senderId
-                : (m.senderType === 0 || m.senderType === "User" || m.senderType === "USER")
+                : m.senderType === 0 ||
+                    m.senderType === "User" ||
+                    m.senderType === "USER"
                   ? "user-" + conversationId
                   : "admin-system";
 
@@ -95,7 +102,9 @@ const token = getToken();
               m.senderName.trim() !== "" &&
               m.senderName !== "User"
                 ? m.senderName
-                : (m.senderType === 0 || m.senderType === "User" || m.senderType === "USER")
+                : m.senderType === 0 ||
+                    m.senderType === "User" ||
+                    m.senderType === "USER"
                   ? "Customer " + conversationId.slice(-4)
                   : "Support Admin";
 
@@ -110,7 +119,9 @@ const token = getToken();
               text: messageText,
               timestamp: m.createdAt || new Date().toISOString(),
               role:
-                m.senderType === 0 || m.senderType === "User" || m.senderType === "USER"
+                m.senderType === 0 ||
+                m.senderType === "User" ||
+                m.senderType === "USER"
                   ? "User"
                   : "Admin",
               targetUserId: m.targetUserId,
@@ -150,29 +161,24 @@ const token = getToken();
   const [replyText, setReplyText] = useState("");
 
   React.useEffect(() => {
-    if (activeUserId) {
-      signalRService.markAsRead(activeUserId);
+
+    const convId = useChatStore.getState().activeConversationId;
+
+    if (activeUserId && convId) {
+      signalRService.markAsRead(convId);
     }
   }, [activeUserId, markMessagesAsRead, messages.length]);
 
   const activeMessages = useMemo(() => {
     if (!activeConversationId) return [];
 
-    return messages.filter(
-      (m) => m.conversationId === activeConversationId
-    );
+    return messages.filter((m) => m.conversationId === activeConversationId);
   }, [messages, activeConversationId]);
-
+ 
   const handleSendReply = (e: React.FormEvent) => {
     e.preventDefault();
- 
    
-    const convId = useChatStore.getState().activeConversationId;
-
-    if (!convId) {
-      alert("Please select a conversation first");
-      return;
-    }
+    if (!convId || !replyText.trim() || !activeUserId) return;
 
     if (!replyText.trim()) return;
 
@@ -186,7 +192,7 @@ const token = getToken();
 
     const payload: Omit<ChatMessage, "id" | "timestamp"> = {
       conversationId: convId,
-      senderId: adminUser.id,
+      senderId: adminUser.userId,
       senderName: adminUser.firstName || "Support Admin",
       text: replyText,
       role: "Admin",
@@ -197,6 +203,13 @@ const token = getToken();
 
     setReplyText("");
   };
+
+  useEffect(() => {
+
+  if (convId) {
+    signalRService.joinConversation(convId);
+  }
+}, [convId]);
 
   return (
     <div className="flex h-[600px] bg-zinc-900 border border-zinc-700 rounded-2xl shadow-2xl overflow-hidden relative">

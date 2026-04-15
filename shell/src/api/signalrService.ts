@@ -52,10 +52,11 @@ class SignalRService {
     if (!this.connection) return;
 
     this.connection.on("ReceiveMessage", (m: BackendMessage) => {
+
       const isSystemAdmin = m.senderType === "Admin" || m.senderType === 1;
       const message: ChatMessage = {
         id: m.id || Math.random().toString(36).substring(7),
-       conversationId: m.conversationId,
+        conversationId: m.conversationId,
         senderId: m.senderId,
         senderName:
           m.senderName ||
@@ -78,8 +79,8 @@ class SignalRService {
     });
 
     // Listen for read receipts
-    this.connection.on("MessagesRead", (userId: string) => {
-      useChatStore.getState().markMessagesAsRead(userId);
+    this.connection.on("MessagesRead", (conversationId: string) => {
+      useChatStore.getState().markMessagesAsRead(conversationId);
     });
   }
 
@@ -154,7 +155,8 @@ public async sendMessage(
 
 const authState = useAuthStore.getState();
 
-const userId = authState.user?.userId;
+const userId = authState.user?.userId || authState.user?.id;
+const tempId  =`temp-${Math.random().toString(36).substring(2, 15)}`;
 
 const payload = {
   conversationId: convId,
@@ -170,22 +172,32 @@ try {
     { headers: this.getHeaders() }
   );
 
-  useChatStore.getState().addMessage({
-    ...messagePayload,
-    conversationId: convId,
-    senderId: userId, 
-    timestamp: new Date().toISOString(),
-    status: "sent",
-  });
+useChatStore.getState().addMessage({
+  ...messagePayload,
+  id: tempId,
+  conversationId: convId,
+  senderId: userId, 
+  timestamp: new Date().toISOString(),
+  status: "sent",
+});
 
 } catch (err) {
   console.error("Error sending message:", err);
 }
 }
 
-  public async markAsRead(userId: string) {
-    useChatStore.getState().markMessagesAsRead(userId);
+  public async markAsRead(conversationId: string) {
+    useChatStore.getState().markMessagesAsRead(conversationId);
+    if (this.connection?.state=== signalR.HubConnectionState.Connected){
+      try {
+        await this.connection.invoke("MarkAsRead", conversationId);
+      } catch (err) {
+        console.error("Error sending read receipt:", err);
+        
+      }
+    }
   }
+ 
 }
 
 export const signalRService = new SignalRService();
