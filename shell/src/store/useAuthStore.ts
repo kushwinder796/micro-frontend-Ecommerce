@@ -43,7 +43,7 @@ export const useAuthStore = create<AuthState>((set) => ({
   logout: () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
-
+   localStorage.removeItem('ecommerce-chat-storage');
     set({
       user: null,
       token: null,

@@ -22,6 +22,7 @@ export default defineConfig({
     port: 3000,
     strictPort: true,
     cors:true,
+    open: true,
   },
   preview: { port: 3000 ,cors:true},
   base: "/",     

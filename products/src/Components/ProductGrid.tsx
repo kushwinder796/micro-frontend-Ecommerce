@@ -15,7 +15,7 @@ const ProductGrid = ({ products, categories, loading }: Props) => {
 
   if (loading) {
     return (
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 16 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 4fr)", gap: 16 }}>
         {[...Array(4)].map((_, i) => (
           <div key={i} style={{
             background: "#0a0a0a", border: "1px solid #111",
@@ -69,7 +69,7 @@ const ProductGrid = ({ products, categories, loading }: Props) => {
   }
 
   return (
-    <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 16 }}>
+    <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 4fr)", gap: 16 }}>
       {products.map((product) => (
         <ProductCard
           key={product.id}

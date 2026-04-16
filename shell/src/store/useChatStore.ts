@@ -38,7 +38,8 @@ interface ChatState {
   markMessagesAsRead: (conversationId: string) => void;
 typingUsers: Record<string, string>;
 setTyping: (data: { conversationId: string; userName: string }) => void;
-// clearChat:()=>void;
+ clearChat:()=>void;
+
 }
 
 export const useChatStore = create<ChatState>()(
@@ -53,12 +54,14 @@ export const useChatStore = create<ChatState>()(
         [conversationId]: userName,
       },
     })),
-    // clearChat:()=>{
-    // set({ messages:[],
-    //   activeconversationId:null,
-    //   isOpen:false,
-    // })
-    // },
+    clearChat:()=>{
+    set({ messages:[],
+      activeConversationId:null,
+      isOpen:false,
+      typingUsers:{},
+      
+    })
+    },
       isOpen: false,
       setIsOpen: (isOpen) => set({ isOpen }),
       isAdminChatOpen: false,

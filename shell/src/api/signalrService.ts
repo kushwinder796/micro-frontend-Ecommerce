@@ -45,8 +45,6 @@ class SignalRService {
 
     this.setupListeners();
 
-    this.setupListeners();
-
     if (this.connection.state === signalR.HubConnectionState.Disconnected) {
       this.connectionPromise = this.connection.start()
         .then(() => console.log("SignalR Connected to ChatHub"))
@@ -76,6 +74,7 @@ class SignalRService {
         await this.connectionPromise;
         return true;
       } catch (err) {
+        console.error("SignalR Reconnection Error:", err);
         this.connectionPromise = null;
         return false;
       }
@@ -138,7 +137,7 @@ class SignalRService {
       useChatStore.getState().updateMessageReactions(data.messageId, data.reactions);
     });
 
-    this.connection.on("User Typing ", (conversationId: string, userName: string) => {
+    this.connection.on("UserTyping ", (conversationId: string, userName: string) => {
       useChatStore.getState().setTyping({
         conversationId,
         userName,
@@ -216,6 +215,20 @@ class SignalRService {
   }
  }
 
+public async disconnect() {
+  if (this.connection) {
+    try {
+      await this.connection.stop();
+      console.log("SignalR Disconnected");
+    } catch (err) {
+      console.error("Disconnect error:", err);
+    } finally {
+      this.connection = null;
+      this.connectionPromise = null;
+    }
+  }
+}
+ 
 
   public async sendMessage(
     messagePayload: Omit<ChatMessage, "id" | "timestamp">,

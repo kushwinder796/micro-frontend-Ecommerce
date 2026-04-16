@@ -32,12 +32,12 @@ const ProductCard = ({ product, categoryName }: Props) => {
   return (
     <div className="bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden group hover:border-cyan-500/40 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-cyan-900/20 transition-all duration-300">
       {/* Image */}
-      <div className="h-44 bg-zinc-950 relative overflow-hidden">
+      <div className="bg-zinc-950 relative overflow-hidden">
         {showImage ? (
           <img
             src={product.imageUrl}
             alt={product.name}
-            className="w-full h-full  object-cover group-hover:scale-110 transition-transform duration-500"
+            className="w-full h-[300px] object-cover group-hover:scale-110 transition-transform duration-500"
             onError={() => setImgError(true)}
           />
         ) : (
@@ -46,11 +46,7 @@ const ProductCard = ({ product, categoryName }: Props) => {
             <span className="text-xs text-zinc-600">No image</span>
           </div>
         )}
-
-        {/* Dark gradient overlay at bottom */}
-        <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-zinc-900 to-transparent" />
-
-        {/* Stock badge */}
+        
         <div
           className={`absolute top-3 right-3 px-2 py-1 rounded-lg text-xs font-bold backdrop-blur-sm ${
             stock > 0

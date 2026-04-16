@@ -3,10 +3,10 @@ import { productService } from "../api/productService";
 import { categoryService } from "../api/categoryService";
 import type { ProductDto } from "../api/productService";
 import type { CategoryDto } from "../api/categoryService";
-import { useNavigate } from "react-router-dom";
+
 import ProductGrid from "../Components/ProductGrid";
 import CategorySidebar from "../Components/CategorySidebar";
-import { useCartStore } from "../store/cart.store";
+
 
 const UserProductPage = () => {
   const [products, setProducts]             = useState<ProductDto[]>([]);
@@ -14,13 +14,6 @@ const UserProductPage = () => {
   const [loading, setLoading]               = useState(true);
   const [search, setSearch]                 = useState("");
   const [activeCategory, setActiveCategory] = useState<number | null>(null);
-  const navigate = useNavigate();
-  const totalItems = useCartStore((s) => s.totalItems());
-
-  // Check if user is Admin
-  const userStr = localStorage.getItem("user");
-  const user = userStr ? JSON.parse(userStr) : null;
-  const isAdmin = user?.role === "Admin";
 
   useEffect(() => {
     const fetchData = async () => {
@@ -67,15 +60,6 @@ const UserProductPage = () => {
         flexDirection: "column",
         overflow: "hidden",
       }}>
-        {/* Sidebar header */}
-        <div style={{
-          padding: "16px 16px 12px",
-          borderBottom: "1px solid #111",
-        }}>
-          <p style={{ fontSize: 11, fontWeight: 700, color: "#3f3f46", textTransform: "uppercase", letterSpacing: 1, margin: 0 }}>
-            Browse
-          </p>
-        </div>
 
         {/* Categories */}
         <div style={{ flex: 1, overflowY: "auto", padding: 12, scrollbarWidth: "none" }}>
@@ -132,31 +116,6 @@ const UserProductPage = () => {
                 onBlur={(e) => e.currentTarget.style.borderColor = "#1a1a1a"}
               />
             </div>
-
-            {/* Cart badge */}
-            {!isAdmin && (
-              <div 
-                onClick={() => navigate("/cart")}
-                style={{
-                  position: "relative", width: 45, height: 45,
-                  background: "#0a0a0a", border: "1px solid #1a1a1a",
-                  borderRadius: 12, display: "flex", alignItems: "center",
-                  justifyContent: "center", cursor: "pointer", fontSize: 16,
-                  transition: "border 0.2s",
-                }}>
-                🛒
-                {totalItems > 0 && (
-                  <span style={{
-                    position: "absolute", top: -4, right: -4,
-                    background: "#7c3aed", color: "#fff",
-                    fontSize: 9, fontWeight: 800,
-                    width: 16, height: 16, borderRadius: "50%",
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    border: "2px solid #050507",
-                  }}>{totalItems}</span>
-                )}
-              </div>
-            )}
           </div>
         </div>
 
