@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom';
 import LogoMarquee from './LogoMarquee';
-import AIChatBox from './AIChatBox';
 
 const LandingPage: React.FC = () => {
   return (
@@ -69,7 +68,6 @@ const LandingPage: React.FC = () => {
         </div>
       </div>
       
-      <AIChatBox />
     </div>
   );
 };

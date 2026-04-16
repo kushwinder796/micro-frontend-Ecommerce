@@ -16,7 +16,6 @@ export default function Navbar() {
 
   const getThemeIcon = () => {
     switch (mode) {
-      case 'light': return '☀️';
       case 'midnight': return '🌌';
       default: return '🌙';
     }

@@ -44,7 +44,6 @@ const LogoMarquee: React.FC = () => {
                 </div>
             </div>
 
-            {/* Added a subtle gradient mask for smooth edges */}
             <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-black/80 to-transparent pointer-events-none z-10"></div>
             <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-black/80 to-transparent pointer-events-none z-10"></div>
         </div>
