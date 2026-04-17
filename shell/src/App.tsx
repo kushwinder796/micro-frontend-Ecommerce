@@ -1,6 +1,7 @@
 import { Suspense, lazy, useEffect } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
 import LandingPage from "./components/LandingPage";
 import ErrorBoundary from "./components/ErrorBoundary";
 import ProtectedRoute from "./routes/ProtectedRoute";
@@ -64,6 +65,7 @@ const App = () => {
           </Suspense>
         </ErrorBoundary>
       </main>
+      <Footer />
 
       {/* Global Overlays */}
       {!isAdmin && <AIChatBox />}
