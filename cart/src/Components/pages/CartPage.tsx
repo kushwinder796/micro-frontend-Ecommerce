@@ -120,7 +120,7 @@ const CartPage = () => {
           </div>
 
           <button
-            onClick={clearCart}
+            onClick={() => clearCart()}
             style={{
               padding: "8px 16px",
               borderRadius: 10,

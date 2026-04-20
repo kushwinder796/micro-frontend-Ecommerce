@@ -9,7 +9,7 @@ export const MFE_PORTS = {
   cart:     3004,
 } as const;
 
-//  Remote URLs (for shell vite.config.ts)
+
 export const REMOTE_URLS = {
   authApp:     `http://localhost:${MFE_PORTS.auth}/assets/remoteEntry.js`,
   productsApp: `http://localhost:${MFE_PORTS.products}/assets/remoteEntry.js`,

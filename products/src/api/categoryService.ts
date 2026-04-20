@@ -1,5 +1,5 @@
 import toast from "react-hot-toast";
-import apiClient from "./apiClient";
+import apiClient from "../../../auth/src/api/api-client";
 
 export interface ApiResponse<T> {
   success: boolean;

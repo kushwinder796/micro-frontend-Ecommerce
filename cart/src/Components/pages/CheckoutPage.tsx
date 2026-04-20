@@ -144,6 +144,12 @@ const CheckoutPage = () => {
         toast.error(data.message || "Payment session failed");
         return;
       }
+     localStorage.setItem("shippingEmail",   form.email);
+    localStorage.setItem("shippingPhone",   form.phone);
+    localStorage.setItem("customerName",    form.fullName);
+    localStorage.setItem("totalAmount",     String(totalPrice()));
+    localStorage.setItem("shippingAddress", `${form.address}, ${form.city}, ${form.pincode}`);
+    localStorage.setItem("shippingMap",     form.map);
 
   
       window.location.href = data.data.url;

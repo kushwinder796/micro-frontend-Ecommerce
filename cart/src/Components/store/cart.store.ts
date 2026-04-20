@@ -14,7 +14,7 @@ export interface ProductDto {
 }
 
  export type  cartstoreInstance=ReturnType<typeof createStore>;
-declare global {
+ declare global {
   interface Window {
     __cartStore: cartstoreInstance;
   }
@@ -27,12 +27,13 @@ export interface CartItem extends ProductDto {
  export interface CartStore {
   items: CartItem[];
   hasHydrated: boolean;
+
   setHasHydrated: (state: boolean) => void;
   addToCart: (product: ProductDto) => void;
   removeFromCart: (productId: string) => void;
   increaseQty: (productId: string) => void;
   decreaseQty: (productId: string) => void;
-  clearCart: () => void;
+  clearCart: (silent?: boolean) => void;
   totalItems: () => number;
   totalPrice: () => number;
 }
@@ -77,10 +78,12 @@ const createStore = () =>
               .filter((i) => i.quantity > 0),
           }),
 
-        clearCart: () => {
+        clearCart: (silent = false) => {
           toast.dismiss();
           set({ items: [] });
-          toast.success("Cart cleared successfully");
+          if (!silent) {
+            toast.success("Cart cleared successfully");
+          }
         },
 
         totalItems: () => get().items.reduce((sum, i) => sum + i.quantity, 0),

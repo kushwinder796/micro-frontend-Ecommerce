@@ -21,10 +21,18 @@ apiClient.interceptors.request.use(
 apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
+    const skipToast = error.config?.headers?.["x-skip-toast"];
+
+
     const message =
       error.response?.data?.message ||
       error.message ||
       "Something went wrong";
+
+if (!skipToast) {
+  toast.error(message);
+}
+
 
     if (error.response?.status === 401) {
       localStorage.removeItem("token");
