@@ -2,15 +2,22 @@ import { useNavigate } from "react-router-dom";
 import { useCartStore } from "../store/cart.store";
 
 const CartPage = () => {
-  const {
-    items,
-    removeFromCart,
-    increaseQty,
-    decreaseQty,
-    totalPrice,
-    clearCart,
-  } = useCartStore();
   const navigate = useNavigate();
+  const items = useCartStore((s) => s.items);
+  const removeFromCart = useCartStore((s) => s.removeFromCart);
+  const increaseQty = useCartStore((s) => s.increaseQty);
+  const decreaseQty = useCartStore((s) => s.decreaseQty);
+  const totalItems = useCartStore((s) => s.totalItems);
+  const totalPrice = useCartStore((s) => s.totalPrice);
+  const clearCart = useCartStore((s) => s.clearCart);
+ const hasHydrated = useCartStore((s) => s.hasHydrated);
+
+ if (!hasHydrated) return (
+  <div style={{ minHeight: "100vh", background: "#050507", display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <p style={{ color: "#fff" }}>Loading...</p>
+  </div>
+);
+ 
 
   if (items.length === 0) {
   return (
@@ -108,7 +115,7 @@ const CartPage = () => {
             </h1>
 
             <p style={{ fontSize: 13, color: "#52525b", margin: "4px 0 0" }}>
-              {items.length} item{items.length > 1 ? "s" : ""}
+              {totalItems()} item{totalItems() !== 1 ? "s" : ""}
             </p>
           </div>
 

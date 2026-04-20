@@ -14,9 +14,6 @@ declare module "cartApp/CartApp" {
   const CartApp: React.ComponentType;
   export default CartApp;
 }
-declare module "paymentApp/PaymentApp" {
-  const PaymentApp: React.ComponentType;
-  export default PaymentApp;
-}
+
 
 

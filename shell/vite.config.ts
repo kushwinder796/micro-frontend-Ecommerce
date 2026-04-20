@@ -13,7 +13,6 @@ export default defineConfig({
         "authApp":       "http://localhost:3001/assets/remoteEntry.js",
         "productsApp":   "http://localhost:3003/assets/remoteEntry.js",
         "cartApp":       "http://localhost:3004/assets/remoteEntry.js",
-       "paymentApp":     "http://localhost:3005/assets/remoteEntry.js",
       },
       shared: ["react", "react-dom", "react-router-dom", "zustand","react-hot-toast"]
     }),

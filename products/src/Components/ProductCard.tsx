@@ -1,7 +1,6 @@
 import { useState } from "react";
 import type { ProductDto } from "../api/productService";
-import { useCartStore } from "../store/cart.store";
-import toast from "react-hot-toast";
+import { useCartStore, type CartStore  } from "../../../cart/src/Components/store/cart.store";
 
 interface Props {
   product: ProductDto;
@@ -9,11 +8,9 @@ interface Props {
 }
 
 const ProductCard = ({ product, categoryName }: Props) => {
-  const addToCart = useCartStore((s) => s.addToCart);
+  const addToCart = useCartStore((s: CartStore) => s.addToCart);
   const stock = product.stock ?? 0;
   const [imgError, setImgError] = useState(false);
-
-  // Check if user is Admin from localStorage
   const userStr = localStorage.getItem("user");
   const user = userStr ? JSON.parse(userStr) : null;
   const isAdmin = user?.role === "Admin";
@@ -22,11 +19,9 @@ const ProductCard = ({ product, categoryName }: Props) => {
 
   const handleBuyNow = () => {
     addToCart(product);
-    toast.success(`${product.name} added! Ready for checkout ⚡`);
   };
   const handleAddToCart = () => {
     addToCart(product);
-    toast.success(`${product.name} added to cart 🛒`);
   };
 
   return (
@@ -120,6 +115,7 @@ const ProductCard = ({ product, categoryName }: Props) => {
         {!isAdmin && (
           <div className="flex gap-2 justify-between">
             <button
+           
               onClick={handleAddToCart}
               className="flex-1 py-2.5 border border-zinc-700 hover:border-cyan-500 hover:text-cyan-400 text-zinc-300 rounded-xl text-xs font-bold transition-all disabled:opacity-40 disabled:cursor-not-allowed"
             >

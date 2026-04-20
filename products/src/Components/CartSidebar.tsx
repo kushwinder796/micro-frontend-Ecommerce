@@ -1,9 +1,16 @@
 import { useNavigate } from "react-router-dom";
-import { useCartStore } from "../store/cart.store";
+import { useCartStore } from "../../../cart/src/Components/store/cart.store";
 
 const CartSidebar = () => {
-  const { items, removeFromCart, increaseQty, decreaseQty, totalItems, totalPrice } = useCartStore();
-  const navigate = useNavigate();
+  
+const items = useCartStore((s) => s.items);
+const removeFromCart = useCartStore((s) => s.removeFromCart);
+const increaseQty = useCartStore((s) => s.increaseQty);
+const decreaseQty = useCartStore((s) => s.decreaseQty);
+const totalItems = useCartStore((s) => s.totalItems);
+const totalPrice = useCartStore((s) => s.totalPrice);
+ const navigate = useNavigate();
+
 
   return (
     <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-4">
@@ -58,7 +65,7 @@ const CartSidebar = () => {
               </span>
             </div>
             <button 
-              onClick={() => navigate("/cart")}
+              onClick={() => navigate("/cart/checkout")}
               className="w-full py-2.5 bg-gradient-to-r from-violet-600 to-purple-600 hover:opacity-90 text-white rounded-xl text-sm font-bold transition-all"
             >
               Checkout ⚡

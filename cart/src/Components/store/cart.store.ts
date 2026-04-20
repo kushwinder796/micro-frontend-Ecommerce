@@ -1,70 +1,107 @@
+
+import toast from "react-hot-toast";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
 export interface ProductDto {
-  id:          string;
-  name:        string;
-  price:       number;
+  id: string;
+  name: string;
+  price: number;
   description: string;
-  stock:       number;
-  categoryId:  number;
-  imageUrl?:   string;
+  stock: number;
+  categoryId: number;
+  imageUrl?: string;
+}
+
+ export type  cartstoreInstance=ReturnType<typeof createStore>;
+declare global {
+  interface Window {
+    __cartStore: cartstoreInstance;
+  }
 }
 
 export interface CartItem extends ProductDto {
   quantity: number;
 }
 
-interface CartStore {
-  items:          CartItem[];
-  addToCart:      (product: ProductDto) => void;
+ export interface CartStore {
+  items: CartItem[];
+  hasHydrated: boolean;
+  setHasHydrated: (state: boolean) => void;
+  addToCart: (product: ProductDto) => void;
   removeFromCart: (productId: string) => void;
-  increaseQty:    (productId: string) => void;
-  decreaseQty:    (productId: string) => void;
-  clearCart:      () => void;
-  totalItems:     () => number;
-  totalPrice:     () => number;
+  increaseQty: (productId: string) => void;
+  decreaseQty: (productId: string) => void;
+  clearCart: () => void;
+  totalItems: () => number;
+  totalPrice: () => number;
 }
 
-export const useCartStore = create<CartStore>()(
-  persist(
-    (set, get) => ({
-      items: [],
+const createStore = () =>
+  create<CartStore>()(
+    persist(
+      (set, get) => ({
+        items: [],
+        hasHydrated: false,
+        setHasHydrated: (v) => set({ hasHydrated: v }),
 
-      addToCart: (product) => {
-        const existing = get().items.find((i) => i.id === product.id);
-        if (existing) {
+        addToCart: (product) => {
+          const existing = get().items.find((i) => i.id === product.id);
+          if (existing) {
+            set({
+              items: get().items.map((i) =>
+                i.id === product.id ? { ...i, quantity: i.quantity + 1 } : i
+              ),
+            });
+          } else {
+            set({ items: [...get().items, { ...product, quantity: 1 }] });
+          }
+        },
+
+        removeFromCart: (id) =>
+          set({ items: get().items.filter((i) => i.id !== id) }),
+
+        increaseQty: (id) =>
           set({
             items: get().items.map((i) =>
-              i.id === product.id ? { ...i, quantity: i.quantity + 1 } : i
+              i.id === id ? { ...i, quantity: i.quantity + 1 } : i
             ),
-          });
-        } else {
-          set({ items: [...get().items, { ...product, quantity: 1 }] });
-        }
-      },
+          }),
 
-      removeFromCart: (id) =>
-        set({ items: get().items.filter((i) => i.id !== id) }),
+        decreaseQty: (id) =>
+          set({
+            items: get()
+              .items.map((i) =>
+                i.id === id ? { ...i, quantity: i.quantity - 1 } : i
+              )
+              .filter((i) => i.quantity > 0),
+          }),
 
-      increaseQty: (id) =>
-        set({
-          items: get().items.map((i) =>
-            i.id === id ? { ...i, quantity: i.quantity + 1 } : i
-          ),
-        }),
+        clearCart: () => {
+          toast.dismiss();
+          set({ items: [] });
+          toast.success("Cart cleared successfully");
+        },
 
-      decreaseQty: (id) =>
-        set({
-          items: get().items
-            .map((i) => i.id === id ? { ...i, quantity: i.quantity - 1 } : i)
-            .filter((i) => i.quantity > 0),
-        }),
+        totalItems: () => get().items.reduce((sum, i) => sum + i.quantity, 0),
+        totalPrice: () =>
+          get().items.reduce((sum, i) => sum + i.price * i.quantity, 0),
+      }),
+      {
+        name: "cart-storage",
+        onRehydrateStorage: () => (state) => {
+          state?.setHasHydrated(true);
+        },
+        partialize: (state) => ({ items: state.items }),
+      }
+    )
+  );
 
-      clearCart:  () => set({ items: [] }),
-      totalItems: () => get().items.reduce((sum, i) => sum + i.quantity, 0),
-      totalPrice: () => get().items.reduce((sum, i) => sum + i.price * i.quantity, 0),
-    }),
-    { name: "cart-storage" }
-  )
-);
+
+if (!window.__cartStore) {
+
+  window.__cartStore = createStore();
+}
+
+
+export const useCartStore = window.__cartStore;

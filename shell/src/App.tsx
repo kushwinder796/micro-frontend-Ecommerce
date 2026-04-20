@@ -66,8 +66,7 @@ const App = () => {
         </ErrorBoundary>
       </main>
       <Footer />
-
-      {/* Global Overlays */}
+      
       {!isAdmin && <AIChatBox />}
       {isAdmin && isAdminChatOpen && (
         <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
