@@ -14,78 +14,101 @@ const ProductCard = ({ product, categoryName }: Props) => {
   const userStr = localStorage.getItem("user");
   const user = userStr ? JSON.parse(userStr) : null;
   const isAdmin = user?.role === "Admin";
-
   const showImage = product.imageUrl && !imgError;
 
+  
+  const activeOffer = product.offers?.find(
+    (o) => o.status?.toLowerCase() === "accepted"
+  );
+  const discountedPrice = activeOffer ? activeOffer.offeredPrice : product.price;
+
   const handleBuyNow = () => {
-    addToCart(product);
+    addToCart({ ...product, price: discountedPrice });
   };
   const handleAddToCart = () => {
-    addToCart(product);
+    addToCart({ ...product, price: discountedPrice });
   };
 
-  return (
-    <div className="bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden group hover:border-cyan-500/40 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-cyan-900/20 transition-all duration-300">
-      {/* Image */}
-      <div className="bg-zinc-950 relative overflow-hidden">
-        {showImage ? (
-          <img
-            src={product.imageUrl}
-            alt={product.name}
-            className="w-full h-[300px] object-cover group-hover:scale-110 transition-transform duration-500"
-            onError={() => setImgError(true)}
-          />
-        ) : (
-          <div className="w-full h-full flex flex-col items-center justify-center gap-1 bg-zinc-900">
-            <span className="text-5xl">📦</span>
-            <span className="text-xs text-zinc-600">No image</span>
+    return (
+      <div className="bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden group hover:border-cyan-500/40 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-cyan-900/20 transition-all duration-300">
+        {/* Image */}
+        <div className="bg-zinc-950 relative overflow-hidden">
+          {showImage ? (
+            <img
+              src={product.imageUrl}
+              alt={product.name}
+              className="w-full h-[300px] object-cover group-hover:scale-110 transition-transform duration-500"
+              onError={() => setImgError(true)}
+            />
+          ) : (
+            <div className="w-full h-full flex flex-col items-center justify-center gap-1 bg-zinc-900">
+              <span className="text-5xl">📦</span>
+              <span className="text-xs text-zinc-600">No image</span>
+            </div>
+          )}
+          
+          {activeOffer && !isAdmin && product.price > 0 && (
+            <div className="absolute top-3 left-3 px-2 py-1 rounded-lg text-[10px] font-black bg-gradient-to-r from-orange-500 to-red-500 text-white border border-orange-400/30 shadow-lg shadow-orange-500/20 uppercase tracking-tighter">
+              {Math.round((1 - activeOffer.offeredPrice / product.price) * 100)}% OFF
+            </div>
+          )}
+
+          <div
+            className={`absolute top-3 right-3 px-2 py-1 rounded-lg text-xs font-bold backdrop-blur-sm ${
+              stock > 0
+                ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
+                : "bg-red-500/20 text-red-400 border border-red-500/30"
+            }`}
+          >
+            {stock > 0 ? `${stock} in stock` : "Out of stock"}
           </div>
-        )}
-        
-        <div
-          className={`absolute top-3 right-3 px-2 py-1 rounded-lg text-xs font-bold backdrop-blur-sm ${
-            stock > 0
-              ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
-              : "bg-red-500/20 text-red-400 border border-red-500/30"
-          }`}
-        >
-          {stock > 0 ? `${stock} in stock` : "Out of stock"}
         </div>
-      </div>
-
-      {/* Content */}
-      <div className="p-4">
-        <p className="text-xs text-cyan-400 font-bold uppercase tracking-wider mb-1">
-          {categoryName || `Category #${product.categoryId}`}
-        </p>
-        <h3 className="text-white font-bold text-base mb-1 line-clamp-1">
-          {product.name}
-        </h3>
-
-        <div className="flex justify-between items-center mb-4">
-          <div>
-            {/* Star Rating Display */}
-            <div className="flex items-center gap-0.5 mb-1">
-              {[1, 2, 3, 4, 5].map((star) => {
-                const mockRating = (product.name.length % 3) + 3;
-                return (
-                  <svg
-                    key={star}
-                    className={"w-3 h-3"}
-                    fill={star <= mockRating ? "#facc15" : "#d1d5db"}
-                    viewBox="0 0 20 20"
-                  >
-                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.962a1 1 0 00.95.69h4.162c.969 0 1.371 1.24.588 1.81l-3.366 2.445a1 1 0 00-.364 1.118l1.286 3.962c.3.921-.755 1.688-1.54 1.118l-3.366-2.445a1 1 0 00-1.175 0l-3.366 2.445c-.784.57-1.838-.197-1.539-1.118l1.286-3.962a1 1 0 00-.364-1.118L2.98 9.389c-.783-.57-.38-1.81.588-1.81h4.162a1 1 0 00.951-.69l1.368-3.962z" />
-                  </svg>
-                );
-              })}
+  
+        {/* Content */}
+        <div className="p-4">
+          <p className="text-xs text-cyan-400 font-bold uppercase tracking-wider mb-1">
+            {categoryName || `Category #${product.categoryId}`}
+          </p>
+          <h3 className="text-white font-bold text-base mb-1 line-clamp-1">
+            {product.name}
+          </h3>
+  
+          <div className="flex justify-between items-center mb-4">
+            <div>
+              {/* Star Rating Display */}
+              <div className="flex items-center gap-0.5 mb-1">
+                {[1, 2, 3, 4, 5].map((star) => {
+                  const mockRating = (product.name.length % 3) + 3;
+                  return (
+                    <svg
+                      key={star}
+                      className={"w-3 h-3"}
+                      fill={star <= mockRating ? "#facc15" : "#d1d5db"}
+                      viewBox="0 0 20 20"
+                    >
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.962a1 1 0 00.95.69h4.162c.969 0 1.371 1.24.588 1.81l-3.366 2.445a1 1 0 00-.364 1.118l1.286 3.962c.3.921-.755 1.688-1.54 1.118l-3.366-2.445a1 1 0 00-1.175 0l-3.366 2.445c-.784.57-1.838-.197-1.539-1.118l1.286-3.962a1 1 0 00-.364-1.118L2.98 9.389c-.783-.57-.38-1.81.588-1.81h4.162a1 1 0 00.951-.69l1.368-3.962z" />
+                    </svg>
+                  );
+                })}
+              </div>
+              <div className="flex flex-col gap-0.5">
+                {/* Offered price — big and bold */}
+                <span className="text-2xl font-extrabold text-white">
+                  ₹{discountedPrice.toLocaleString()}
+                </span>
+                {/* Original price with strikethrough + % OFF — users only */}
+                {activeOffer && !isAdmin && (
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm text-zinc-500 line-through font-medium">
+                      ₹{product.price.toLocaleString()}
+                    </span>
+                    <span className="text-[10px] font-black text-orange-400 bg-orange-500/10 border border-orange-500/20 px-1.5 py-0.5 rounded-md">
+                      -{Math.round((1 - activeOffer.offeredPrice / product.price) * 100)}% OFF
+                    </span>
+                  </div>
+                )}
+              </div>
             </div>
-            <div className="flex items-baseline gap-2">
-              <span className="text-2xl font-extrabold text-white">
-                ₹{product.price.toLocaleString()}
-              </span>
-            </div>
-          </div>
           
           {!isAdmin && (
             <button

@@ -1,59 +1,67 @@
-import api from './api';
+
+import apiClient from '../../../auth/src/api/api-client';
+
 
 export interface OfferDto {
     id: string;
-    name: string;
-    description: string;
-    discountPercentage: number;
-    startDate: string;
-    endDate: string;
-    promoCode: string;
-    isActive: boolean;
+    productId?: string;
+    productName?: string;
+    orderId?: string;
+    offeredPrice: number;
+    status?: string;       
+    createdAt?: string;
 }
 
 export interface CreateOfferDto {
-    name: string;
-    description: string;
-    discountPercentage: number;
-    startDate: string;
-    endDate: string;
-    promoCode: string;
+    productId: string;
+    orderId?: string;
+    offeredPrice: number;
 }
 
-export interface UpdateOfferDto extends CreateOfferDto {
-    isActive: boolean;
+export interface UpdateOfferDto {
+    offeredPrice?: number;
+    status?: string;
 }
+
 
 export interface ApiResponse<T> {
     data: T;
     message: string;
     statusCode: number;
-    isSuccess: boolean;
+    isSuccess?: boolean;   
+    success?: boolean;     
 }
 
-const offerService = {
+export const offerService = {
+
     getAll: async () => {
-        const response = await api.get<ApiResponse<OfferDto[]>>('/offers');
+        const response = await apiClient.get<ApiResponse<OfferDto[]>>('/Offers');
         return response.data;
     },
 
+
     getById: async (id: string) => {
-        const response = await api.get<ApiResponse<OfferDto>>(`/offers/${id}`);
+        const response = await apiClient.get<ApiResponse<OfferDto>>(`/Offers/${id}`);
+        return response.data;
+    },
+
+    getByProduct: async (productId: string) => {
+        const response = await apiClient.get<ApiResponse<OfferDto[]>>(`/Offers/product/${productId}`);
         return response.data;
     },
 
     create: async (offer: CreateOfferDto) => {
-        const response = await api.post<ApiResponse<OfferDto>>('/offers', offer);
+        const response = await apiClient.post<ApiResponse<OfferDto>>('/Offers', offer);
         return response.data;
     },
 
     update: async (id: string, offer: UpdateOfferDto) => {
-        const response = await api.put<ApiResponse<OfferDto>>(`/offers/${id}`, offer);
+        const response = await apiClient.put<ApiResponse<OfferDto>>(`/Offers/${id}`, offer);
         return response.data;
     },
 
     delete: async (id: string) => {
-        const response = await api.delete<ApiResponse<string>>(`/offers/${id}`);
+        const response = await apiClient.delete<ApiResponse<string>>(`/Offers/${id}`);
         return response.data;
     },
 };

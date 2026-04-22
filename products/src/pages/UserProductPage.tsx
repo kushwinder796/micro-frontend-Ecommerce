@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { productService } from "../api/productService";
 import { categoryService } from "../api/categoryService";
+import { offerService } from "../../../cart/src/Services/offerService";
 import type { ProductDto } from "../api/productService";
 import type { CategoryDto } from "../api/categoryService";
 
@@ -18,11 +19,23 @@ const UserProductPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [prods, cats] = await Promise.all([
+        const [prods, cats, offersRes] = await Promise.all([
           productService.getAll(),
           categoryService.getAll(),
+          offerService.getAll(),
         ]);
-        setProducts(prods);
+
+        const offers = offersRes.data ?? [];
+        const prodsWithOffers: ProductDto[] = prods.map((p) => ({
+          ...p,
+          offers: offers.filter(
+            (o) =>
+              o.productId === p.id &&
+              o.status?.toLowerCase() === "accepted"
+          ),
+        }));
+
+        setProducts(prodsWithOffers);
         setCategories(cats);
       } finally {
         setLoading(false);

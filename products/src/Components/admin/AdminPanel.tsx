@@ -1,6 +1,7 @@
 import { useState } from "react";
 import AddCategory from "./AddCategory";
 import AddProduct from "./AddProduct";
+import OfferManagement from "./OfferManagement";
 import type { CategoryDto } from "../../api/categoryService";
 import type { ProductDto } from "../../api/productService";
 
@@ -11,7 +12,7 @@ interface Props {
 }
 
 const AdminPanel = ({ categories, products, onSuccess }: Props) => {
-  const [activeTab, setActiveTab] = useState<"category" | "product">(
+  const [activeTab, setActiveTab] = useState<"category" | "product" | "offer">(
     "category",
   );
 
@@ -77,7 +78,7 @@ const AdminPanel = ({ categories, products, onSuccess }: Props) => {
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "1fr 1fr",
+          gridTemplateColumns: "1fr 1fr 1fr",
           gap: 6,
           padding: 4,
           background: "#09090b",
@@ -86,7 +87,7 @@ const AdminPanel = ({ categories, products, onSuccess }: Props) => {
          
         }}
       >
-        {(["category", "product"] as const).map((tab) => (
+        {(["category", "product", "offer"] as const).map((tab) => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
@@ -113,13 +114,11 @@ const AdminPanel = ({ categories, products, onSuccess }: Props) => {
             }}
           >
             {tab === "category" ? (
-              <>
-                <span>Category</span>
-              </>
+              <span>Category</span>
+            ) : tab === "product" ? (
+              <span>Product</span>
             ) : (
-              <>
-                <span>Product</span>
-              </>
+              <span>Offer</span>
             )}
           </button>
         ))}
@@ -128,12 +127,14 @@ const AdminPanel = ({ categories, products, onSuccess }: Props) => {
       {/* Forms */}
       {activeTab === "category" ? (
         <AddCategory categories={categories} onSuccess={onSuccess} />
-      ) : (
+      ) : activeTab === "product" ? (
         <AddProduct
           categories={categories}
           products={products}
           onSuccess={onSuccess}
         />
+      ) : (
+        <OfferManagement products={products} />
       )}
 
       <style>{`@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }`}</style>

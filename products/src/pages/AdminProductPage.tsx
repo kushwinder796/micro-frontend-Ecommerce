@@ -7,14 +7,15 @@ import ProductGrid from "../Components/ProductGrid";
 import CategorySidebar from "../Components/CategorySidebar";
 import AddCategory from "../Components/admin/AddCategory";
 import AddProduct from "../Components/admin/AddProduct";
+import OfferManagement from "../Components/admin/OfferManagement";
 
 const AdminProductPage = () => {
-  const [products, setProducts]             = useState<ProductDto[]>([]);
-  const [categories, setCategories]         = useState<CategoryDto[]>([]);
-  const [loading, setLoading]               = useState(true);
-  const [search, setSearch]                 = useState("");
+  const [products, setProducts] = useState<ProductDto[]>([]);
+  const [categories, setCategories] = useState<CategoryDto[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState<number | null>(null);
-  const [activeTab, setActiveTab]           = useState<"category" | "product">("category");
+  const [activeTab, setActiveTab] = useState<"category" | "product" | "offer">("category");
 
   const fetchData = async () => {
     try {
@@ -33,7 +34,7 @@ const AdminProductPage = () => {
 
   const filtered = products.filter((p) => {
     const matchSearch = p.name.toLowerCase().includes(search.toLowerCase());
-    const matchCat    = activeCategory === null || p.categoryId === activeCategory;
+    const matchCat = activeCategory === null || p.categoryId === activeCategory;
     return matchSearch && matchCat;
   });
 
@@ -87,11 +88,11 @@ const AdminProductPage = () => {
         {/* Tabs */}
         <div style={{ padding: "12px 16px", borderBottom: "1px solid #111" }}>
           <div style={{
-            display: "grid", gridTemplateColumns: "1fr 1fr",
+            display: "grid", gridTemplateColumns: "1fr 1fr 1fr",
             gap: 4, background: "#0a0a0a", borderRadius: 10, padding: 3,
             border: "1px solid #1a1a1a",
           }}>
-            {(["category", "product"] as const).map((tab) => (
+            {(["category", "product", "offer"] as const).map((tab) => (
               <button key={tab} onClick={() => setActiveTab(tab)} style={{
                 padding: "8px 0", borderRadius: 8, border: "none",
                 fontSize: 12, fontWeight: 700, cursor: "pointer",
@@ -103,7 +104,7 @@ const AdminProductPage = () => {
                 boxShadow: activeTab === tab ? "0 2px 10px rgba(109,40,217,0.3)" : "none",
                 display: "flex", alignItems: "center", justifyContent: "center", gap: 5,
               }}>
-                {tab === "category" ? <>Category</>  :  <>Product</>}
+                {tab === "category" ? <>Category</> : tab === "product" ? <>Product</> : <>Offer</>}
               </button>
             ))}
           </div>
@@ -111,7 +112,9 @@ const AdminProductPage = () => {
         <div style={{ flex: 1, overflowY: "auto", padding: 16, scrollbarWidth: "none" }}>
           {activeTab === "category"
             ? <AddCategory categories={categories} onSuccess={fetchData} />
-            : <AddProduct  products={products} categories={categories} onSuccess={fetchData} />
+            : activeTab === "product"
+              ? <AddProduct products={products} categories={categories} onSuccess={fetchData} />
+              : <OfferManagement products={products} />
           }
 
           <div style={{ marginTop: 16 }}>
@@ -176,8 +179,8 @@ const AdminProductPage = () => {
         }}>
           {[
             { label: "Total Products", value: products.length, color: "#7c3aed" },
-            { label: "Categories",     value: categories.length, color: "#0891b2" },
-            
+            { label: "Categories", value: categories.length, color: "#0891b2" },
+
           ].map((stat) => (
             <div key={stat.label} style={{
               flex: 1, padding: "10px 14px", borderRadius: 10,

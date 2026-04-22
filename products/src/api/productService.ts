@@ -1,5 +1,6 @@
 import toast from "react-hot-toast";
 import apiClient from "../../../auth/src/api/api-client";
+import type { OfferDto } from "../../../cart/src/Services/offerService";
 import type { ApiResponse } from "./categoryService";
 
 export interface ProductDto {
@@ -10,6 +11,7 @@ export interface ProductDto {
   stock: number;
   categoryId: number;
   imageUrl?: string;
+  offers?: OfferDto[];
 }
 
 export interface CreateProductCommand {
