@@ -1,13 +1,15 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { productService } from "../api/productService";
 import { categoryService } from "../api/categoryService";
-import { offerService } from "../../../cart/src/Services/offerService";
+import { offerService, type OfferDto } from "../../../cart/src/Services/offerService";
 import type { ProductDto } from "../api/productService";
 import type { CategoryDto } from "../api/categoryService";
-
 import ProductGrid from "../Components/ProductGrid";
 import CategorySidebar from "../Components/CategorySidebar";
 
+
+export const OFFER_CHANGED_KEY = "offer_last_changed";
+export const OFFER_CHANGED_EVENT = "offer:changed";
 
 const UserProductPage = () => {
   const [products, setProducts]             = useState<ProductDto[]>([]);
@@ -16,33 +18,64 @@ const UserProductPage = () => {
   const [search, setSearch]                 = useState("");
   const [activeCategory, setActiveCategory] = useState<number | null>(null);
 
+  const baseProdsRef = useRef<ProductDto[]>([]);
+
+  const mergeOffers = useCallback((prods: ProductDto[], offers: OfferDto[]): ProductDto[] =>
+    prods.map((p) => ({
+      ...p,
+      offers: offers.filter(
+        (o) => o.productId === p.id && o.status?.toLowerCase() === "accepted"
+      ),
+    }))
+  , []);
+
+  const refreshOffers = useCallback(async () => {
+    if (baseProdsRef.current.length === 0) return;
+    try {
+      const offersRes = await offerService.getAll();
+      setProducts(mergeOffers(baseProdsRef.current, offersRes.data ?? []));
+    } catch {
+      // silent
+    }
+  }, [mergeOffers]);
+
+
   useEffect(() => {
-    const fetchData = async () => {
+    let cancelled = false;
+    const load = async () => {
       try {
         const [prods, cats, offersRes] = await Promise.all([
           productService.getAll(),
           categoryService.getAll(),
           offerService.getAll(),
         ]);
-
-        const offers = offersRes.data ?? [];
-        const prodsWithOffers: ProductDto[] = prods.map((p) => ({
-          ...p,
-          offers: offers.filter(
-            (o) =>
-              o.productId === p.id &&
-              o.status?.toLowerCase() === "accepted"
-          ),
-        }));
-
-        setProducts(prodsWithOffers);
+        if (cancelled) return;
+        baseProdsRef.current = prods;
         setCategories(cats);
+        setProducts(mergeOffers(prods, offersRes.data ?? []));
       } finally {
-        setLoading(false);
+        if (!cancelled) setLoading(false);
       }
     };
-    fetchData();
-  }, []);
+    load();
+    return () => { cancelled = true; };
+  }, [mergeOffers]);
+
+
+ 
+  useEffect(() => {
+    const onCustom = () => { refreshOffers(); };
+    window.addEventListener(OFFER_CHANGED_EVENT, onCustom);
+    const onStorage = (e: StorageEvent) => {
+      if (e.key === OFFER_CHANGED_KEY) refreshOffers();
+    };
+    window.addEventListener("storage", onStorage);
+
+    return () => {
+      window.removeEventListener(OFFER_CHANGED_EVENT, onCustom);
+      window.removeEventListener("storage", onStorage);
+    };
+  }, [refreshOffers]);
 
   const filtered = products.filter((p) => {
     const matchSearch = p.name.toLowerCase().includes(search.toLowerCase());

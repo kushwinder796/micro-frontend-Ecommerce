@@ -10,7 +10,7 @@ interface Props {
 }
 
 const AddProduct = ({ categories, products, onSuccess }: Props) => {
-  const [form, setForm] = useState({ name: "", price: "", categoryId: "" });
+  const [form, setForm] = useState({ name: "", price: "", categoryId: "", description: "" });
   const [image, setImage] = useState<File | null>(null);
   const [preview, setPreview] = useState("");
   const [loading, setLoading] = useState(false);
@@ -28,7 +28,7 @@ const AddProduct = ({ categories, products, onSuccess }: Props) => {
   }, {});
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>,
   ) => setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleImage = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -45,6 +45,7 @@ const AddProduct = ({ categories, products, onSuccess }: Props) => {
       name: product.name,
       price: product.price.toString(),
       categoryId: product.categoryId.toString(),
+      description: product.description ?? "",
     });
     setPreview("");
     setImage(null);
@@ -77,6 +78,7 @@ const AddProduct = ({ categories, products, onSuccess }: Props) => {
         await productService.update(editingId, {
           id: editingId,
           name: form.name,
+          description: form.description,
           price: Number(form.price),
           categoryId: Number(form.categoryId),
         });
@@ -84,12 +86,13 @@ const AddProduct = ({ categories, products, onSuccess }: Props) => {
       } else {
         await productService.create({
           name: form.name,
+          description: form.description,
           price: Number(form.price),
           categoryId: Number(form.categoryId),
           image: image ?? undefined,
         });
       }
-      setForm({ name: "", price: "", categoryId: "" });
+      setForm({ name: "", price: "", categoryId: "", description: "" });
       setImage(null);
       setPreview("");
       onSuccess();
@@ -98,7 +101,7 @@ const AddProduct = ({ categories, products, onSuccess }: Props) => {
     }
   };
 
-  const isReady = form.name && form.price && form.categoryId;
+  const isReady = form.name && form.price && form.categoryId && form.description;
 
   const inputStyle = (field: string): React.CSSProperties => ({
     width: "100%",
@@ -163,7 +166,7 @@ const AddProduct = ({ categories, products, onSuccess }: Props) => {
             <button
               onClick={() => {
                 setEditingId(null);
-                setForm({ name: "", price: "", categoryId: "" });
+                setForm({ name: "", price: "", categoryId: "", description: "" });
               }}
               style={{
                 marginLeft: "auto",
@@ -212,6 +215,36 @@ const AddProduct = ({ categories, products, onSuccess }: Props) => {
               onBlur={() => setFocused("")}
               placeholder=""
               style={inputStyle("name")}
+            />
+          </div>
+
+          <div>
+            <label
+              style={{
+                fontSize: 10,
+                fontWeight: 700,
+                color: "#52525b",
+                textTransform: "uppercase",
+                letterSpacing: 1,
+                display: "block",
+                marginBottom: 6,
+              }}
+            >
+              Description *
+            </label>
+            <textarea
+              name="description"
+              value={form.description}
+              onChange={(e) => setForm({ ...form, description: e.target.value })}
+              onFocus={() => setFocused("description")}
+              onBlur={() => setFocused("")}
+              placeholder=""
+              rows={3}
+              style={{
+                ...inputStyle("description"),
+                resize: "none",
+                fontFamily: "inherit",
+              }}
             />
           </div>
 

@@ -10,7 +10,7 @@ export default function Navbar() {
   const { mode, cycleTheme } = useThemeStore();
   const { isAdminChatOpen, setIsAdminChatOpen, messages } = useChatStore();
   const isAdmin = user?.role === "Admin";
-  const totalItems = useCartStore((s) => s.totalItems);
+  const totalItems = useCartStore((s) => s.totalItems());
 
   const handleLogout = () => {
     logout();
@@ -91,9 +91,9 @@ export default function Navbar() {
               }}
             >
               🛒
-              {totalItems() > 0 && (
+              {totalItems > 0 && (
                 <span className="absolute -top-1 -right-1 w-4 h-4 text-[10px] font-bold flex items-center justify-center rounded-full bg-violet-600 text-white border-2 border-black">
-                  {totalItems()}
+                  {totalItems}
                 </span>
               )}
             </div>

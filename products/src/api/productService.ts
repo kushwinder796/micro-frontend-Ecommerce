@@ -16,14 +16,16 @@ export interface ProductDto {
 
 export interface CreateProductCommand {
   name: string;
+  description: string;
   price: number;
   categoryId: number;
   image?: File;
 }
 
 export interface UpdateProductCommand {
-  id:string;
+  id: string;
   name: string;
+  description: string;
   price: number;
   categoryId: number;
 }
@@ -37,9 +39,10 @@ export const productService = {
 
   create: async (command: CreateProductCommand): Promise<string> => {
     const formData = new FormData();
-    formData.append("Name",       command.name);
-    formData.append("Price",      command.price.toString());
-    formData.append("CategoryId", command.categoryId.toString());
+    formData.append("Name",        command.name);
+    formData.append("Description", command.description);
+    formData.append("Price",       command.price.toString());
+    formData.append("CategoryId",  command.categoryId.toString());
     if (command.image) formData.append("Image", command.image);
 
     const response = await apiClient.post<ApiResponse<string>>("/Product", formData, {

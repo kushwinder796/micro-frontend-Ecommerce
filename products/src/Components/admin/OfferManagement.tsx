@@ -2,11 +2,10 @@ import React, { useState, useEffect } from "react";
 import {
   type OfferDto,
   type CreateOfferDto,
-  type UpdateOfferDto,
-  offerService,
-} from "../../../../cart/src/Services/offerService";
+  type UpdateOfferDto,offerService,} from "../../../../cart/src/Services/offerService";
 import type { ProductDto } from "../../api/productService";
 import { toast } from "react-hot-toast";
+import { OFFER_CHANGED_KEY, OFFER_CHANGED_EVENT } from "../../pages/UserProductPage";
 
 interface Props {
   products: ProductDto[];
@@ -17,19 +16,24 @@ interface OfferFormData {
   offeredPrice: string;
 }
 
-const EMPTY_FORM: OfferFormData = { productId: "", offeredPrice: "" };
+const clearForm: OfferFormData = { productId: "", offeredPrice: "" };
 const isOk = (res: { isSuccess?: boolean; success?: boolean }): boolean =>
   res.isSuccess === true || (res as { success?: boolean }).success === true;
+
+const notifyOfferChanged = () => {
+  window.dispatchEvent(new CustomEvent(OFFER_CHANGED_EVENT));
+  localStorage.setItem(OFFER_CHANGED_KEY, String(Date.now()));
+};
 
 const OfferManagement = ({ products }: Props) => {
   const [offers, setOffers]         = useState<OfferDto[]>([]);
   const [loading, setLoading]       = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [editingId, setEditingId]   = useState<string | null>(null);
-  const [form, setForm]             = useState<OfferFormData>(EMPTY_FORM);
+  const [form, setForm]             = useState<OfferFormData>(clearForm);
   const [deleteId, setDeleteId]     = useState<string | null>(null);
 
-  // ── derived ────────────────────────────────────────────────────────────────
+
   const selectedProduct = products.find((p) => p.id === form.productId) ?? null;
   const offeredPrice    = parseFloat(form.offeredPrice) || 0;
   const originalPrice   = selectedProduct?.price ?? 0;
@@ -38,7 +42,6 @@ const OfferManagement = ({ products }: Props) => {
       ? Math.round((1 - offeredPrice / originalPrice) * 100)
       : 0;
 
-  // ── fetch ──────────────────────────────────────────────────────────────────
   const fetchOffers = async () => {
     try {
       setLoading(true);
@@ -58,10 +61,8 @@ const OfferManagement = ({ products }: Props) => {
 
   useEffect(() => { fetchOffers(); }, []);
 
-  // ── submit ─────────────────────────────────────────────────────────────────
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
     if (!editingId && !form.productId) {
       toast.error("Please select a product");
       return;
@@ -81,12 +82,13 @@ const OfferManagement = ({ products }: Props) => {
         const payload: UpdateOfferDto = { offeredPrice };
         const res = await offerService.update(editingId, payload);
         if (isOk(res)) {
-          toast.success("Offer price updated — product price changed instantly!");
+          toast.success("Offer price updated !!");
           setEditingId(null);
-          setForm(EMPTY_FORM);
+          setForm(clearForm);
           fetchOffers();
+          notifyOfferChanged();
         } else {
-          toast.error(res.message ?? "Update failed");
+          toast.error(res.message ?? "Update price failed");
         }
       } else {
         const payload: CreateOfferDto = {
@@ -95,22 +97,21 @@ const OfferManagement = ({ products }: Props) => {
         };
         const res = await offerService.create(payload);
         if (isOk(res)) {
-          toast.success("Offer created — product price updated instantly!");
-          setForm(EMPTY_FORM);
+          toast.success("Offer created successfully !!");
+          setForm(clearForm);
           fetchOffers();
+          notifyOfferChanged();
         } else {
           toast.error(res.message ?? "Create failed");
         }
       }
     } catch (err) {
-      // apiClient interceptor already shows a toast; log for debugging
       console.error("Offer submit error:", err);
     } finally {
       setSubmitting(false);
     }
   };
 
-  // ── toggle status (Pending ↔ Accepted) ────────────────────────────────────
   const handleToggleStatus = async (offer: OfferDto) => {
     const newStatus =
       offer.status?.toLowerCase() === "accepted" ? "Pending" : "Accepted";
@@ -119,10 +120,11 @@ const OfferManagement = ({ products }: Props) => {
       if (isOk(res)) {
         toast.success(
           newStatus === "Accepted"
-            ? "Offer activated — price is now live for users!"
-            : "⏸ Offer paused — original price restored for users."
+            ? "Offer activated"
+            : "Offer DeActivated"
         );
         fetchOffers();
+        notifyOfferChanged();
       } else {
         toast.error(res.message ?? "Status update failed");
       }
@@ -138,6 +140,7 @@ const OfferManagement = ({ products }: Props) => {
       if (isOk(res)) {
         toast.success("Offer removed");
         fetchOffers();
+        notifyOfferChanged();
       } else {
         toast.error(res.message ?? "Delete failed");
       }
@@ -159,7 +162,7 @@ const OfferManagement = ({ products }: Props) => {
 
   const cancelEdit = () => {
     setEditingId(null);
-    setForm(EMPTY_FORM);
+    setForm(clearForm);
   };
 
   const statusBadge = (status?: string) => {
@@ -253,7 +256,6 @@ const OfferManagement = ({ products }: Props) => {
               required
               step="0.01"
               min="0.01"
-              placeholder="e.g. 75000"
               value={form.offeredPrice}
               onChange={(e) => setForm({ ...form, offeredPrice: e.target.value })}
               style={{ width: "100%", background: "#0a0a0a", border: "1px solid #27272a", borderRadius: 8, padding: "8px 10px", fontSize: 12, color: "#fff", outline: "none", boxSizing: "border-box" }}
@@ -386,7 +388,7 @@ const OfferManagement = ({ products }: Props) => {
                       {isAccepted ? "⏸ Pause" : "▶ Activate"}
                     </button>
 
-                    {/* Edit */}
+           
                     <button
                       onClick={() => startEdit(offer)}
                       style={{
@@ -402,7 +404,6 @@ const OfferManagement = ({ products }: Props) => {
                       ✏️ Edit
                     </button>
 
-                    {/* Delete */}
                     <button
                       onClick={() => handleDelete(offer.id)}
                       disabled={deleteId === offer.id}

@@ -54,8 +54,18 @@ const createStore = () =>
                 i.id === product.id ? { ...i, quantity: i.quantity + 1 } : i
               ),
             });
+            toast.success(`${product.name} quantity updated`, {
+              icon: "🛒",
+              style: { background: "#0a0a0a", color: "#fff", border: "1px solid #27272a", fontSize: 13 },
+              duration: 1800,
+            });
           } else {
             set({ items: [...get().items, { ...product, quantity: 1 }] });
+            toast.success(`${product.name} added to cart`, {
+              icon: "🛒",
+              style: { background: "#0a0a0a", color: "#fff", border: "1px solid #27272a", fontSize: 13 },
+              duration: 1800,
+            });
           }
         },
 

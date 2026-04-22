@@ -187,7 +187,7 @@ const CheckoutPage = () => {
 
         {/* Header */}
         <div style={{ marginBottom: 28 }}>
-          {/* ✅ window.location.href instead of navigate */}
+       
           <button
             onClick={() => window.location.href = "/cart"}
             className="bg-cyan-400 mb-4"

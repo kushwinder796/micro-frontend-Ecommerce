@@ -1,6 +1,7 @@
 import { useState } from "react";
 import type { ProductDto } from "../api/productService";
 import { useCartStore, type CartStore  } from "../../../cart/src/Components/store/cart.store";
+import toast from "react-hot-toast";
 
 interface Props {
   product: ProductDto;
@@ -24,6 +25,11 @@ const ProductCard = ({ product, categoryName }: Props) => {
 
   const handleBuyNow = () => {
     addToCart({ ...product, price: discountedPrice });
+    toast.success(`Redirecting to checkout...`, {
+      icon: "⚡",
+      style: { background: "#0a0a0a", color: "#fff", border: "1px solid #7c3aed", fontSize: 13 },
+      duration: 1500,
+    });
   };
   const handleAddToCart = () => {
     addToCart({ ...product, price: discountedPrice });
@@ -31,7 +37,6 @@ const ProductCard = ({ product, categoryName }: Props) => {
 
     return (
       <div className="bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden group hover:border-cyan-500/40 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-cyan-900/20 transition-all duration-300">
-        {/* Image */}
         <div className="bg-zinc-950 relative overflow-hidden">
           {showImage ? (
             <img
