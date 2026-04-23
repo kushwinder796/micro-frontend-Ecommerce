@@ -1,10 +1,10 @@
 {
   "latestErrorEvent": {
     "code": "TYPE-001",
-    "message": "Failed to generate type declaration. Execute the below cmd to reproduce and fix the error. #TYPE-001\nargs: {\"cmd\":\"npx tsc --project C:\\\\Ecommerce\\\\micro-frontend-Ecommerce\\\\auth\\\\node_modules\\\\.federation\\\\tsconfig.07cd7e2a78634b2ed4608d4cc8b036b0.json\"}\nView the docs to see how to solve: https://module-federation.io/guide/troubleshooting/type#type-001",
+    "message": "Failed to generate type declaration. Execute the below cmd to reproduce and fix the error. #TYPE-001\nargs: {\"cmd\":\"npx tsc --project C:\\\\Ecommerce\\\\micro-frontend-Ecommerce\\\\auth\\\\node_modules\\\\.federation\\\\tsconfig.ea098857146d1b00ecb759d321974e99.json\"}\nView the docs to see how to solve: https://module-federation.io/guide/troubleshooting/type#type-001",
     "args": {
-      "cmd": "npx tsc --project C:\\Ecommerce\\micro-frontend-Ecommerce\\auth\\node_modules\\.federation\\tsconfig.07cd7e2a78634b2ed4608d4cc8b036b0.json"
+      "cmd": "npx tsc --project C:\\Ecommerce\\micro-frontend-Ecommerce\\auth\\node_modules\\.federation\\tsconfig.ea098857146d1b00ecb759d321974e99.json"
     },
-    "timestamp": 1776929716126
+    "timestamp": 1776929788767
   }
 }
