@@ -2,14 +2,8 @@
   "name": "micro-frontend-ecommerce",
   "version": "1.0.0",
   "private": true,
-
-"scripts": {
-    "auth":     "cd auth     && npm run build && npm run preview",
-    "products": "cd products && npm run build && npm run preview",
-    "cart":     "cd cart     && npm run build && npm run preview",  
-    "shell":    "cd shell    && npm run dev",
-    "shell:wait": "wait-on http://localhost:3001/assets/remoteEntry.js http://localhost:3003/assets/remoteEntry.js http://localhost:3004/assets/remoteEntry.js && npm run shell",
-    "dev": "concurrently --kill-others-on-fail -n \"AUTH,PRODUCTS,CART,SHELL\" -c \"cyan,magenta,yellow,green\" \"npm run auth\" \"npm run products\" \"npm run cart\" \"npm run shell:wait\""
+  "scripts": {
+    "dev": "concurrently --kill-others-on-fail -n \"AUTH,PRODUCTS,CART,SHELL\" -c \"cyan,magenta,yellow,green\" \"npm run dev --prefix auth\" \"npm run dev --prefix products\" \"npm run dev --prefix cart\" \"npm run dev --prefix shell\""
   },
   "devDependencies": {
     "concurrently": "^8.2.0",

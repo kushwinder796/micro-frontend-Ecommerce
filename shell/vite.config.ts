@@ -1,29 +1,30 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import federation from '@originjs/vite-plugin-federation'
+import { federation } from '@module-federation/vite'
 import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
   plugins: [
-    react(),
-    tailwindcss(),
     federation({
       name: "shell",
       remotes: {
-        "authApp":       "http://localhost:3001/assets/remoteEntry.js",
-        "productsApp":   "http://localhost:3003/assets/remoteEntry.js",
-        "cartApp":       "http://localhost:3004/assets/remoteEntry.js",
+        authApp:     { type: "module", name: "authApp",     entry: "http://localhost:3001/remoteEntry.js" },
+        productsApp: { type: "module", name: "productsApp", entry: "http://localhost:3003/remoteEntry.js" },
+        cartApp:     { type: "module", name: "cartApp",     entry: "http://localhost:3004/remoteEntry.js" },
       },
-      shared: ["react", "react-dom", "react-router-dom", "zustand","react-hot-toast"]
+      shared: {
+        react:              { singleton: true, requiredVersion: "^19.0.0" },
+        "react-dom":        { singleton: true, requiredVersion: "^19.0.0" },
+        "react-router-dom": { singleton: true, requiredVersion: "^7.0.0" },
+        zustand:            { singleton: true, requiredVersion: "^5.0.0" },
+        "react-hot-toast":  { singleton: true, requiredVersion: "^2.0.0" },
+      },
     }),
+    react(),
+    tailwindcss(),
   ],
-  server: {
-    port: 3000,
-    strictPort: true,
-    cors:true,
-    open: true,
-  },
-  preview: { port: 3000 ,cors:true},
-  base: "/",     
-  build: { target: "esnext" ,minify:false,cssCodeSplit:false},
-})
+  server:  { port: 3000, strictPort: true, cors: true, open: true },
+  preview: { port: 3000, cors: true },
+  base: "/",
+  build: { target: "esnext", minify: false, cssCodeSplit: false },
+});

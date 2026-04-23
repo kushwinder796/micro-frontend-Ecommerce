@@ -1,0 +1,10 @@
+{
+  "latestErrorEvent": {
+    "code": "TYPE-001",
+    "message": "Failed to generate type declaration. Execute the below cmd to reproduce and fix the error. #TYPE-001\nargs: {\"cmd\":\"npx tsc --project C:\\\\Ecommerce\\\\micro-frontend-Ecommerce\\\\cart\\\\node_modules\\\\.federation\\\\tsconfig.87df2392fe4b3da0bec568a38ea65bde.json\"}\nView the docs to see how to solve: https://module-federation.io/guide/troubleshooting/type#type-001",
+    "args": {
+      "cmd": "npx tsc --project C:\\Ecommerce\\micro-frontend-Ecommerce\\cart\\node_modules\\.federation\\tsconfig.87df2392fe4b3da0bec568a38ea65bde.json"
+    },
+    "timestamp": 1776929720683
+  }
+}
