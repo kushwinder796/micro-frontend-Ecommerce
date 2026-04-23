@@ -106,13 +106,13 @@ const AddProduct = ({ categories, products, onSuccess }: Props) => {
   const inputStyle = (field: string): React.CSSProperties => ({
     width: "100%",
     padding: "10px 14px",
-    background: "#09090b",
+    background: "var(--bg-primary)",
     border:
       focused === field
         ? "1px solid rgba(139,92,246,0.6)"
-        : "1px solid #27272a",
+        : "1px solid var(--border-color)",
     borderRadius: 10,
-    color: "#f4f4f5",
+    color: "var(--text-primary)",
     fontSize: 13,
     outline: "none",
     transition: "all 0.2s",
@@ -124,7 +124,7 @@ const AddProduct = ({ categories, products, onSuccess }: Props) => {
     <>
       <div
         style={{
-          background: "linear-gradient(145deg,#18181b,#1c1c1f)",
+          background: "var(--bg-secondary)",
           borderRadius: 20,
           padding: 20,
           maxWidth: 420,
@@ -155,10 +155,10 @@ const AddProduct = ({ categories, products, onSuccess }: Props) => {
             📦
           </div>
           <div>
-            <p style={{ fontSize: 14, fontWeight: 700, color: "#f4f4f5" }}>
+            <p style={{ fontSize: 14, fontWeight: 700, color: "var(--text-primary)" }}>
               {editingId ? "Edit Product" : "Add Product"}
             </p>
-            <p style={{ fontSize: 11, color: "#52525b" }}>
+            <p style={{ fontSize: 11, color: "var(--text-secondary)" }}>
               {products.length} products total
             </p>
           </div>
@@ -198,7 +198,7 @@ const AddProduct = ({ categories, products, onSuccess }: Props) => {
               style={{
                 fontSize: 10,
                 fontWeight: 700,
-                color: "#52525b",
+                color: "var(--text-secondary)",
                 textTransform: "uppercase",
                 letterSpacing: 1,
                 display: "block",
@@ -223,7 +223,7 @@ const AddProduct = ({ categories, products, onSuccess }: Props) => {
               style={{
                 fontSize: 10,
                 fontWeight: 700,
-                color: "#52525b",
+                color: "var(--text-secondary)",
                 textTransform: "uppercase",
                 letterSpacing: 1,
                 display: "block",
@@ -256,7 +256,7 @@ const AddProduct = ({ categories, products, onSuccess }: Props) => {
                 style={{
                   fontSize: 10,
                   fontWeight: 700,
-                  color: "#52525b",
+                  color: "var(--text-secondary)",
                   textTransform: "uppercase",
                   letterSpacing: 1,
                   display: "block",
@@ -281,7 +281,7 @@ const AddProduct = ({ categories, products, onSuccess }: Props) => {
                 style={{
                   fontSize: 10,
                   fontWeight: 700,
-                  color: "#52525b",
+                  color: "var(--text-secondary)",
                   textTransform: "uppercase",
                   letterSpacing: 1,
                   display: "block",
@@ -315,7 +315,7 @@ const AddProduct = ({ categories, products, onSuccess }: Props) => {
                 style={{
                   fontSize: 10,
                   fontWeight: 700,
-                  color: "#52525b",
+                  color: "var(--text-secondary)",
                   textTransform: "uppercase",
                   letterSpacing: 1,
                   display: "block",
@@ -328,7 +328,7 @@ const AddProduct = ({ categories, products, onSuccess }: Props) => {
                 style={{
                   display: "block",
                   border: "2px dashed",
-                  borderColor: preview ? "#7c3aed" : "#27272a",
+                  borderColor: preview ? "#7c3aed" : "var(--border-color)",
                   borderRadius: 10,
                   overflow: "hidden",
                   cursor: "pointer",
@@ -346,7 +346,7 @@ const AddProduct = ({ categories, products, onSuccess }: Props) => {
                     style={{
                       padding: "16px",
                       textAlign: "center",
-                      color: "#3f3f46",
+                      color: "var(--text-secondary)",
                       fontSize: 12,
                     }}
                   >
@@ -375,7 +375,7 @@ const AddProduct = ({ categories, products, onSuccess }: Props) => {
                 ? editingId
                   ? "linear-gradient(135deg,#0891b2,#2563eb)"
                   : "linear-gradient(135deg,#7c3aed,#a855f7)"
-                : "#27272a",
+                : "var(--border-color)",
               color: "#fff",
               fontSize: 13,
               fontWeight: 700,
@@ -417,7 +417,7 @@ const AddProduct = ({ categories, products, onSuccess }: Props) => {
             style={{
               fontSize: 10,
               fontWeight: 700,
-              color: "#52525b",
+              color: "var(--text-secondary)",
               textTransform: "uppercase",
               letterSpacing: 1,
               marginBottom: 8,
@@ -438,7 +438,7 @@ const AddProduct = ({ categories, products, onSuccess }: Props) => {
               <p
                 style={{
                   fontSize: 12,
-                  color: "#3f3f46",
+                  color: "var(--text-secondary)",
                   textAlign: "center",
                   padding: "12px 0",
                 }}
@@ -451,11 +451,11 @@ const AddProduct = ({ categories, products, onSuccess }: Props) => {
                   key={product.id}
                   style={{
                     padding: "10px 12px",
-                    background: "#09090b",
+                    background: "var(--bg-primary)",
                     border:
                       editingId === product.id
                         ? "1px solid rgba(139,92,246,0.4)"
-                        : "1px solid #27272a",
+                        : "1px solid var(--border-color)",
                     borderRadius: 10,
                     transition: "all 0.2s",
                   }}
@@ -473,7 +473,7 @@ const AddProduct = ({ categories, products, onSuccess }: Props) => {
                         style={{
                           fontSize: 13,
                           fontWeight: 700,
-                          color: "#f4f4f5",
+                          color: "var(--text-primary)",
                           whiteSpace: "nowrap",
                           overflow: "hidden",
                           textOverflow: "ellipsis",
@@ -498,7 +498,7 @@ const AddProduct = ({ categories, products, onSuccess }: Props) => {
                         >
                           ₹{product.price.toLocaleString()}
                         </span>
-                        <span style={{ fontSize: 10, color: "#52525b" }}>
+                        <span style={{ fontSize: 10, color: "var(--text-secondary)" }}>
                           {categoryMap[product.categoryId] ||
                             `#${product.categoryId}`}
                         </span>
@@ -559,7 +559,7 @@ const AddProduct = ({ categories, products, onSuccess }: Props) => {
                           <div
                             style={{
                               background:
-                                "linear-gradient(145deg,#1f1f23,#18181b)",
+                                "var(--bg-secondary)",
                               padding: 24,
                               borderRadius: 16,
                               width: 360,
@@ -568,13 +568,13 @@ const AddProduct = ({ categories, products, onSuccess }: Props) => {
                               animation: "fadeIn 0.25s ease",
                             }}
                           >
-                            <h3 style={{ color: "#f4f4f5", marginBottom: 8 }}>
-                              ⚠️ Delete Product
+                            <h3 style={{ color: "var(--text-primary)", marginBottom: 8 }}>
+                              ⚠️ Delete Product 
                             </h3>
 
                             <p
                               style={{
-                                color: "#a1a1aa",
+                                color: "var(--text-secondary)",
                                 fontSize: 13,
                                 marginBottom: 20,
                               }}
@@ -595,9 +595,9 @@ const AddProduct = ({ categories, products, onSuccess }: Props) => {
                                 style={{
                                   padding: "6px 14px",
                                   borderRadius: 8,
-                                  border: "1px solid #27272a",
+                                  border: "1px solid var(--border-color)",
                                   background: "transparent",
-                                  color: "#a1a1aa",
+                                  color: "var(--text-secondary)",
                                   cursor: "pointer",
                                 }}
                               >
@@ -648,7 +648,7 @@ const AddProduct = ({ categories, products, onSuccess }: Props) => {
     }
   }
 
-  select option { background: #18181b; }
+  select option { background: var(--bg-secondary); }
 
   input[type=number]::-webkit-inner-spin-button { 
     -webkit-appearance: none; 

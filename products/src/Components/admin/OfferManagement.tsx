@@ -191,17 +191,17 @@ const OfferManagement = ({ products }: Props) => {
     <div className="space-y-3">
       <div
         id="offer-form"
-        style={{ background: "#0f0f0f", border: "1px solid #1a1a1a", borderRadius: 14, padding: 14 }}
+        style={{ background: "var(--bg-secondary)", border: "1px solid var(--border-color)", borderRadius: 14, padding: 14 }}
       >
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
-          <span style={{ fontSize: 13, fontWeight: 700, color: "#fff" }}>
+          <span style={{ fontSize: 13, fontWeight: 700, color: "var(--text-primary)" }}>
             {editingId ? "✏️ Edit Offer" : "🏷️ New Offer"}
           </span>
           {editingId && (
             <button
               type="button"
               onClick={cancelEdit}
-              style={{ fontSize: 11, color: "#52525b", background: "none", border: "none", cursor: "pointer" }}
+              style={{ fontSize: 11, color: "var(--text-secondary)", background: "none", border: "none", cursor: "pointer" }}
             >
               ✕ Cancel
             </button>
@@ -212,11 +212,11 @@ const OfferManagement = ({ products }: Props) => {
 
           {/* Product */}
           <div>
-            <label style={{ fontSize: 10, fontWeight: 700, color: "#52525b", textTransform: "uppercase", letterSpacing: 1, display: "block", marginBottom: 5 }}>
+            <label style={{ fontSize: 10, fontWeight: 700, color: "var(--text-secondary)", textTransform: "uppercase", letterSpacing: 1, display: "block", marginBottom: 5 }}>
               Product
             </label>
             {editingId ? (
-              <div style={{ background: "#1a1a1a", border: "1px solid #27272a", borderRadius: 8, padding: "8px 10px", fontSize: 12, color: "#a1a1aa" }}>
+              <div style={{ background: "var(--bg-primary)", border: "1px solid var(--border-color)", borderRadius: 8, padding: "8px 10px", fontSize: 12, color: "var(--text-secondary)" }}>
                 {products.find((p) => p.id === form.productId)?.name ?? "—"}
               </div>
             ) : (
@@ -224,7 +224,7 @@ const OfferManagement = ({ products }: Props) => {
                 required
                 value={form.productId}
                 onChange={(e) => setForm({ productId: e.target.value, offeredPrice: "" })}
-                style={{ width: "100%", background: "#0a0a0a", border: "1px solid #27272a", borderRadius: 8, padding: "8px 10px", fontSize: 12, color: "#fff", outline: "none", cursor: "pointer" }}
+                style={{ width: "100%", background: "var(--bg-primary)", border: "1px solid var(--border-color)", borderRadius: 8, padding: "8px 10px", fontSize: 12, color: "var(--text-primary)", outline: "none", cursor: "pointer" }}
               >
                 <option value="">— Select product —</option>
                 {products.map((p) => (
@@ -236,19 +236,17 @@ const OfferManagement = ({ products }: Props) => {
             )}
           </div>
 
-    
           <div>
-            <label style={{ fontSize: 10, fontWeight: 700, color: "#52525b", textTransform: "uppercase", letterSpacing: 1, display: "block", marginBottom: 5 }}>
+            <label style={{ fontSize: 10, fontWeight: 700, color: "var(--text-secondary)", textTransform: "uppercase", letterSpacing: 1, display: "block", marginBottom: 5 }}>
               Original Price
             </label>
-            <div style={{ background: "#1a1a1a", border: "1px solid #27272a", borderRadius: 8, padding: "8px 10px", fontSize: 12, color: "#52525b" }}>
+            <div style={{ background: "var(--bg-primary)", border: "1px solid var(--border-color)", borderRadius: 8, padding: "8px 10px", fontSize: 12, color: "var(--text-secondary)" }}>
               {selectedProduct ? `₹${selectedProduct.price.toLocaleString()}` : "—"}
             </div>
           </div>
 
-  
           <div>
-            <label style={{ fontSize: 10, fontWeight: 700, color: "#52525b", textTransform: "uppercase", letterSpacing: 1, display: "block", marginBottom: 5 }}>
+            <label style={{ fontSize: 10, fontWeight: 700, color: "var(--text-secondary)", textTransform: "uppercase", letterSpacing: 1, display: "block", marginBottom: 5 }}>
               Offered Price <span style={{ color: "#7c3aed" }}>*</span>
             </label>
             <input
@@ -258,10 +256,9 @@ const OfferManagement = ({ products }: Props) => {
               min="0.01"
               value={form.offeredPrice}
               onChange={(e) => setForm({ ...form, offeredPrice: e.target.value })}
-              style={{ width: "100%", background: "#0a0a0a", border: "1px solid #27272a", borderRadius: 8, padding: "8px 10px", fontSize: 12, color: "#fff", outline: "none", boxSizing: "border-box" }}
+              style={{ width: "100%", background: "var(--bg-primary)", border: "1px solid var(--border-color)", borderRadius: 8, padding: "8px 10px", fontSize: 12, color: "var(--text-primary)", outline: "none", boxSizing: "border-box" }}
             />
           </div>
-
 
           {selectedProduct && offeredPrice > 0 && (
             <div style={{
@@ -270,11 +267,11 @@ const OfferManagement = ({ products }: Props) => {
               display: "flex", alignItems: "center", justifyContent: "space-between",
             }}>
               <div>
-                <p style={{ fontSize: 11, fontWeight: 700, color: "#fff", margin: 0 }}>
+                <p style={{ fontSize: 11, fontWeight: 700, color: "var(--text-primary)", margin: 0 }}>
                   {savings > 0 ? `Saves ${savings}%` : "⚠️ Must be lower"}
                 </p>
                 {savings > 0 && (
-                  <p style={{ fontSize: 10, color: "#52525b", margin: "2px 0 0" }}>
+                  <p style={{ fontSize: 10, color: "var(--text-secondary)", margin: "2px 0 0" }}>
                     ₹{selectedProduct.price.toLocaleString()} → <span style={{ color: "#22c55e", fontWeight: 700 }}>₹{offeredPrice.toLocaleString()}</span>
                   </p>
                 )}
@@ -284,7 +281,6 @@ const OfferManagement = ({ products }: Props) => {
               )}
             </div>
           )}
-
 
           <button
             type="submit"
@@ -306,19 +302,19 @@ const OfferManagement = ({ products }: Props) => {
 
       <div>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>
-          <span style={{ fontSize: 12, fontWeight: 700, color: "#fff" }}>All Offers</span>
-          <span style={{ fontSize: 10, color: "#3f3f46" }}>{offers.length} total</span>
+          <span style={{ fontSize: 12, fontWeight: 700, color: "var(--text-primary)" }}>All Offers</span>
+          <span style={{ fontSize: 10, color: "var(--text-secondary)" }}>{offers.length} total</span>
         </div>
 
         {loading ? (
           <div style={{ display: "flex", alignItems: "center", justifyContent: "center", padding: "24px 0", gap: 8 }}>
-            <span style={{ width: 16, height: 16, border: "2px solid #27272a", borderTopColor: "#7c3aed", borderRadius: "50%", display: "inline-block", animation: "spin 0.7s linear infinite" }} />
-            <span style={{ fontSize: 12, color: "#52525b" }}>Loading...</span>
+            <span style={{ width: 16, height: 16, border: "2px solid var(--border-color)", borderTopColor: "#7c3aed", borderRadius: "50%", display: "inline-block", animation: "spin 0.7s linear infinite" }} />
+            <span style={{ fontSize: 12, color: "var(--text-secondary)" }}>Loading...</span>
           </div>
         ) : offers.length === 0 ? (
-          <div style={{ textAlign: "center", padding: "24px 0", border: "1px dashed #1a1a1a", borderRadius: 12 }}>
+          <div style={{ textAlign: "center", padding: "24px 0", border: "1px dashed var(--border-color)", borderRadius: 12 }}>
             <p style={{ fontSize: 20, margin: "0 0 6px" }}>🏷️</p>
-            <p style={{ fontSize: 11, color: "#52525b", margin: 0 }}>No offers yet</p>
+            <p style={{ fontSize: 11, color: "var(--text-secondary)", margin: 0 }}>No offers yet</p>
           </div>
         ) : (
           <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
@@ -333,8 +329,8 @@ const OfferManagement = ({ products }: Props) => {
                 <div
                   key={offer.id}
                   style={{
-                    background: "#0f0f0f",
-                    border: `1px solid ${isAccepted ? "rgba(34,197,94,0.2)" : "#1a1a1a"}`,
+                    background: "var(--bg-secondary)",
+                    border: `1px solid ${isAccepted ? "rgba(34,197,94,0.2)" : "var(--border-color)"}`,
                     borderRadius: 12,
                     padding: 12,
                     display: "flex",
@@ -344,14 +340,14 @@ const OfferManagement = ({ products }: Props) => {
                 >
                   <div>
                     <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap", marginBottom: 4 }}>
-                      <span style={{ fontSize: 12, fontWeight: 700, color: "#fff" }}>
+                      <span style={{ fontSize: 12, fontWeight: 700, color: "var(--text-primary)" }}>
                         {offer.productName ?? prod?.name ?? "—"}
                       </span>
                       {statusBadge(offer.status)}
                     </div>
                     <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
                       {prod && (
-                        <span style={{ fontSize: 11, color: "#52525b", textDecoration: "line-through" }}>
+                        <span style={{ fontSize: 11, color: "var(--text-secondary)", textDecoration: "line-through" }}>
                           ₹{prod.price.toLocaleString()}
                         </span>
                       )}
@@ -365,7 +361,7 @@ const OfferManagement = ({ products }: Props) => {
                       )}
                     </div>
                     {offer.createdAt && (
-                      <p style={{ fontSize: 10, color: "#3f3f46", margin: "3px 0 0" }}>
+                      <p style={{ fontSize: 10, color: "var(--text-secondary)", margin: "3px 0 0" }}>
                         {new Date(offer.createdAt).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}
                       </p>
                     )}
@@ -373,7 +369,6 @@ const OfferManagement = ({ products }: Props) => {
 
                   {/* Actions — single row */}
                   <div style={{ display: "flex", gap: 5 }}>
-                    {/* Activate / Pause */}
                     <button
                       onClick={() => handleToggleStatus(offer)}
                       style={{
@@ -388,18 +383,17 @@ const OfferManagement = ({ products }: Props) => {
                       {isAccepted ? "⏸ Pause" : "▶ Activate"}
                     </button>
 
-           
                     <button
                       onClick={() => startEdit(offer)}
                       style={{
                         flex: 1, padding: "6px 0", borderRadius: 7,
-                        border: "1px solid #27272a", background: "#1a1a1a",
-                        color: "#a1a1aa", fontSize: 10, fontWeight: 700,
+                        border: "1px solid var(--border-color)", background: "var(--bg-primary)",
+                        color: "var(--text-secondary)", fontSize: 10, fontWeight: 700,
                         cursor: "pointer", whiteSpace: "nowrap",
                         display: "flex", alignItems: "center", justifyContent: "center", gap: 3,
                       }}
                       onMouseEnter={(e) => { e.currentTarget.style.background = "#7c3aed"; e.currentTarget.style.color = "#fff"; e.currentTarget.style.borderColor = "#7c3aed"; }}
-                      onMouseLeave={(e) => { e.currentTarget.style.background = "#1a1a1a"; e.currentTarget.style.color = "#a1a1aa"; e.currentTarget.style.borderColor = "#27272a"; }}
+                      onMouseLeave={(e) => { e.currentTarget.style.background = "var(--bg-primary)"; e.currentTarget.style.color = "var(--text-secondary)"; e.currentTarget.style.borderColor = "var(--border-color)"; }}
                     >
                       ✏️ Edit
                     </button>
@@ -409,13 +403,13 @@ const OfferManagement = ({ products }: Props) => {
                       disabled={deleteId === offer.id}
                       style={{
                         width: 30, flexShrink: 0, padding: "6px 0", borderRadius: 7,
-                        border: "1px solid #27272a", background: "#1a1a1a",
-                        color: "#a1a1aa", fontSize: 12, cursor: "pointer",
+                        border: "1px solid var(--border-color)", background: "var(--bg-primary)",
+                        color: "var(--text-secondary)", fontSize: 12, cursor: "pointer",
                         display: "flex", alignItems: "center", justifyContent: "center",
                         opacity: deleteId === offer.id ? 0.4 : 1,
                       }}
                       onMouseEnter={(e) => { e.currentTarget.style.background = "#ef4444"; e.currentTarget.style.color = "#fff"; e.currentTarget.style.borderColor = "#ef4444"; }}
-                      onMouseLeave={(e) => { e.currentTarget.style.background = "#1a1a1a"; e.currentTarget.style.color = "#a1a1aa"; e.currentTarget.style.borderColor = "#27272a"; }}
+                      onMouseLeave={(e) => { e.currentTarget.style.background = "var(--bg-primary)"; e.currentTarget.style.color = "var(--text-secondary)"; e.currentTarget.style.borderColor = "var(--border-color)"; }}
                     >
                       {deleteId === offer.id
                         ? <span style={{ width: 11, height: 11, border: "2px solid rgba(255,255,255,0.3)", borderTopColor: "#fff", borderRadius: "50%", display: "inline-block", animation: "spin 0.7s linear infinite" }} />

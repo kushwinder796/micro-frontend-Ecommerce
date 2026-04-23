@@ -13,8 +13,8 @@ const CartPage = () => {
  const hasHydrated = useCartStore((s) => s.hasHydrated);
 
  if (!hasHydrated) return (
-  <div style={{ minHeight: "100vh", background: "#050507", display: "flex", alignItems: "center", justifyContent: "center" }}>
-    <p style={{ color: "#fff" }}>Loading...</p>
+  <div style={{ minHeight: "100vh", background: "var(--bg-primary)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <p style={{ color: "var(--text-primary)" }}>Loading...</p>
   </div>
 );
  
@@ -25,7 +25,7 @@ const CartPage = () => {
       style={{
         minHeight: "100dvh",
         width: "100%",
-        background: "#050507",
+        background: "var(--bg-primary)",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
@@ -57,8 +57,8 @@ const CartPage = () => {
           width: 90,
           height: 90,
           borderRadius: 24,
-          background: "#0a0a0a",
-          border: "1px solid #1a1a1a",
+          background: "var(--bg-card)",
+          border: "1px solid var(--border-color)",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -68,7 +68,7 @@ const CartPage = () => {
         🛒
       </div>
 
-      <p style={{ color: "#fff", fontSize: 20, fontWeight: 800, margin: 0 }}>
+      <p style={{ color: "var(--text-primary)", fontSize: 20, fontWeight: 800, margin: 0 }}>
         Your cart is empty
       </p>
 
@@ -107,14 +107,14 @@ const CartPage = () => {
               style={{
                 fontSize: 26,
                 fontWeight: 800,
-                color: "#fff",
+                color: "var(--text-primary)",
                 margin: 0,
               }}
             >
               Your Cart
             </h1>
 
-            <p style={{ fontSize: 13, color: "#52525b", margin: "4px 0 0" }}>
+            <p style={{ fontSize: 13, color: "var(--text-secondary)", margin: "4px 0 0" }}>
               {totalItems()} item{totalItems() !== 1 ? "s" : ""}
             </p>
           </div>
@@ -150,8 +150,8 @@ const CartPage = () => {
               <div
                 key={item.id}
                 style={{
-                  background: "#0a0a0a",
-                  border: "1px solid #1a1a1a",
+                  background: "var(--bg-card)",
+                  border: "1px solid var(--border-color)",
                   borderRadius: 16,
                   padding: 16,
                   display: "flex",
@@ -166,7 +166,7 @@ const CartPage = () => {
                     width: 88,
                     height: 88,
                     borderRadius: 12,
-                    background: "#111",
+                    background: "var(--bg-secondary)",
                     flexShrink: 0,
                     overflow: "hidden",
                   }}
@@ -203,7 +203,7 @@ const CartPage = () => {
                     style={{
                       fontSize: 15,
                       fontWeight: 700,
-                      color: "#fff",
+                      color: "var(--text-primary)",
                       margin: 0,
                     }}
                   >
@@ -236,9 +236,9 @@ const CartPage = () => {
                       width: 32,
                       height: 32,
                       borderRadius: 8,
-                      background: "#1a1a1a",
-                      border: "1px solid #27272a",
-                      color: "#fff",
+                      background: "var(--bg-secondary)",
+                      border: "1px solid var(--border-color)",
+                      color: "var(--text-primary)",
                       fontSize: 18,
                       cursor: "pointer",
                       display: "flex",
@@ -253,7 +253,7 @@ const CartPage = () => {
                     style={{
                       fontSize: 15,
                       fontWeight: 800,
-                      color: "#fff",
+                      color: "var(--text-primary)",
                       minWidth: 24,
                       textAlign: "center",
                     }}
@@ -266,9 +266,9 @@ const CartPage = () => {
                       width: 32,
                       height: 32,
                       borderRadius: 8,
-                      background: "#1a1a1a",
-                      border: "1px solid #27272a",
-                      color: "#fff",
+                      background: "var(--bg-secondary)",
+                      border: "1px solid var(--border-color)",
+                      color: "var(--text-primary)",
                       fontSize: 18,
                       cursor: "pointer",
                       display: "flex",
@@ -308,8 +308,8 @@ const CartPage = () => {
           {/* Order Summary */}
           <div
             style={{
-              background: "#0a0a0a",
-              border: "1px solid #1a1a1a",
+              background: "var(--bg-card)",
+              border: "1px solid var(--border-color)",
               borderRadius: 16,
               padding: 20,
               position: "sticky",
@@ -320,7 +320,7 @@ const CartPage = () => {
               style={{
                 fontSize: 15,
                 fontWeight: 700,
-                color: "#fff",
+                color: "var(--text-primary)",
                 margin: "0 0 16px",
               }}
             >
@@ -345,18 +345,18 @@ const CartPage = () => {
                     fontSize: 13,
                   }}
                 >
-                  <span style={{ color: "#71717a" }}>
+                  <span style={{ color: "var(--text-secondary)" }}>
                     {item.name} × {item.quantity}
                   </span>
 
-                  <span style={{ color: "#fff", fontWeight: 600 }}>
+                  <span style={{ color: "var(--text-primary)", fontWeight: 600 }}>
                     ₹{(item.price * item.quantity).toLocaleString()}
                   </span>
                 </div>
               ))}
             </div>
 
-            <div style={{ borderTop: "1px solid #1a1a1a", paddingTop: 14 }}>
+            <div style={{ borderTop: "1px solid var(--border-color)", paddingTop: 14 }}>
               <div
                 style={{
                   display: "flex",
@@ -364,7 +364,7 @@ const CartPage = () => {
                   marginBottom: 16,
                 }}
               >
-                <span style={{ fontSize: 13, color: "#71717a" }}>Delivery</span>
+                <span style={{ fontSize: 13, color: "var(--text-secondary)" }}>Delivery</span>
                 <span
                   style={{ fontSize: 13, color: "#22c55e", fontWeight: 700 }}
                 >
@@ -381,7 +381,7 @@ const CartPage = () => {
                   gap: 12,
                 }}
               >
-                <span style={{ fontSize: 17, fontWeight: 800, color: "#fff" }}>
+                <span style={{ fontSize: 17, fontWeight: 800, color: "var(--text-primary)" }}>
                   Total
                 </span>
                 <div style={{ textAlign: "right" }}>
@@ -425,7 +425,7 @@ const CartPage = () => {
               }}
             >
               <span style={{ fontSize: 16 }}>🔒</span>
-              <p style={{ fontSize: 11, color: "#52525b", margin: 0 }}>
+              <p style={{ fontSize: 11, color: "var(--text-secondary)", margin: 0 }}>
                 100% secure checkout
               </p>
             </div>

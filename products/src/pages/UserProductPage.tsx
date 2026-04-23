@@ -91,7 +91,7 @@ const UserProductPage = () => {
   return (
     <div style={{
       height: "calc(100vh - 64px)",
-      background: "#050507",
+      background: "var(--bg-primary)",
       display: "flex",
       overflow: "hidden",
       fontFamily: "'DM Sans', sans-serif",
@@ -101,7 +101,7 @@ const UserProductPage = () => {
       <div style={{
         width: 240,
         flexShrink: 0,
-        borderRight: "1px solid #111",
+        borderRight: "1px solid var(--border-color)",
         display: "flex",
         flexDirection: "column",
         overflow: "hidden",
@@ -124,19 +124,19 @@ const UserProductPage = () => {
         {/* Top bar */}
         <div style={{
           padding: "16px 24px",
-          borderBottom: "1px solid #111",
+          borderBottom: "1px solid var(--border-color)",
           display: "flex", alignItems: "center",
           justifyContent: "space-between",
           flexShrink: 0,
         }}>
           <div>
-            <h1 style={{ fontSize: 20, fontWeight: 800, color: "#fff", margin: 0 }}>
+            <h1 style={{ fontSize: 20, fontWeight: 800, color: "var(--text-primary)", margin: 0 }}>
               {activeCategory
                 ? categories.find(c => c.id === activeCategory)?.name ?? "Products"
                 : "All Products"
               }
             </h1>
-            <p style={{ fontSize: 18, color: "#3f3f46", margin: "3px 0 0" }}>
+            <p style={{ fontSize: 18, color: "var(--text-secondary)", margin: "3px 0 0" }}>
               {filtered.length} products available
             </p>
           </div>
@@ -146,7 +146,7 @@ const UserProductPage = () => {
             <div style={{ position: "relative" }}>
               <span style={{
                 position: "absolute", left: 12, top: "50%",
-                transform: "translateY(-50%)", fontSize: 14, color: "#3f3f46",
+                transform: "translateY(-50%)", fontSize: 14, color: "var(--text-secondary)",
               }}>🔍</span>
               <input
                 value={search}
@@ -154,12 +154,12 @@ const UserProductPage = () => {
                 placeholder="Search..."
                 style={{
                   paddingLeft: 36, paddingRight: 14, paddingTop: 9, paddingBottom: 9,
-                  background: "#0a0a0a", border: "1px solid #1a1a1a",
-                  borderRadius: 10, color: "#fff", fontSize: 20, outline: "none",
+                  background: "var(--bg-card)", border: "1px solid var(--border-color)",
+                  borderRadius: 10, color: "var(--text-primary)", fontSize: 20, outline: "none",
                   width: 200, transition: "border 0.2s",
                 }}
                 onFocus={(e) => e.currentTarget.style.borderColor = "#0891b2"}
-                onBlur={(e) => e.currentTarget.style.borderColor = "#1a1a1a"}
+                onBlur={(e) => e.currentTarget.style.borderColor = "var(--border-color)"}
               />
             </div>
           </div>
@@ -174,7 +174,7 @@ const UserProductPage = () => {
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800&display=swap');
         ::-webkit-scrollbar { display: none; }
-        input::placeholder { color: #3f3f46; }
+        input::placeholder { color: var(--text-secondary); }
       `}</style>
     </div>
   );

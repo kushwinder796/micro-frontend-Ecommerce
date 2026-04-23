@@ -7,6 +7,7 @@ export default defineConfig({
   plugins: [
     federation({
       name: "shell",
+      dts: false,  
       remotes: {
         authApp:     { type: "module", name: "authApp",     entry: "http://localhost:3001/remoteEntry.js" },
         productsApp: { type: "module", name: "productsApp", entry: "http://localhost:3003/remoteEntry.js" },

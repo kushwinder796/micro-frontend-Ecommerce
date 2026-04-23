@@ -62,12 +62,12 @@ const Login = () => {
 };
 
   return (
-    <div className="min-h-screen bg-zinc-950 flex items-center justify-center px-4 selection:bg-cyan-500/30">
-      <div className="bg-zinc-900/50 backdrop-blur-2xl border border-zinc-800 rounded-[2.5rem] w-full max-w-md p-10 shadow-2xl relative overflow-hidden">
+    <div className="min-h-screen bg-[var(--bg-primary)] flex items-center justify-center px-4 selection:bg-cyan-500/30">
+      <div className="bg-[var(--bg-secondary)] backdrop-blur-2xl border border-zinc-800 rounded-[2.5rem] w-full max-w-md p-10 shadow-2xl relative overflow-hidden">
         <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cyan-500 to-transparent opacity-50"></div>
 
         <div className="text-center mb-10">
-          <h2 className="text-4xl font-extrabold text-white mb-2 tracking-tight">
+          <h2 className="text-4xl font-extrabold text-[var(--text-primary)] mb-2 tracking-tight">
             Welcome Back
           </h2>
           <p className="text-zinc-500 font-medium">Please enter your details to sign in</p>
@@ -81,7 +81,7 @@ const Login = () => {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className={`w-full pl-11 pr-4 py-4 bg-zinc-800/50 border rounded-2xl text-white placeholder-zinc-600 focus:outline-none transition-all ${
+                className={`w-full pl-11 pr-4 py-4 bg-[var(--input-bg)] border rounded-2xl text-[var(--text-primary)] placeholder-zinc-600 focus:outline-none transition-all ${
                   errors.email
                     ? "border-red-500/50 focus:border-red-500"
                     : "border-zinc-700/50 focus:border-cyan-500/50"
@@ -105,7 +105,7 @@ const Login = () => {
                 type={showPassword ? "text" : "password"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className={`w-full pl-11 pr-12 py-4 bg-zinc-800/50 border rounded-2xl text-white placeholder-zinc-600 focus:outline-none transition-all ${
+                className={`w-full pl-11 pr-12 py-4 bg-[var(--input-bg)] border rounded-2xl text-[var(--text-primary)] placeholder-zinc-600 focus:outline-none transition-all ${
                   errors.password
                     ? "border-red-500/50 focus:border-red-500"
                     : "border-zinc-700/50 focus:border-cyan-500/50"

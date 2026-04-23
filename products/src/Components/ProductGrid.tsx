@@ -18,19 +18,19 @@ const ProductGrid = ({ products, categories, loading }: Props) => {
       <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 4fr)", gap: 16 }}>
         {[...Array(4)].map((_, i) => (
           <div key={i} style={{
-            background: "#0a0a0a", border: "1px solid #111",
+            background: "var(--bg-card)", border: "1px solid var(--border-color)",
             borderRadius: 16, overflow: "hidden",
           }}>
-            <div style={{ height: 180, background: "#111",
+            <div style={{ height: 180, background: "var(--bg-secondary)",
               animation: "pulse 1.5s ease-in-out infinite" }} />
             <div style={{ padding: 16, display: "flex", flexDirection: "column", gap: 8 }}>
-              <div style={{ height: 10, background: "#111", borderRadius: 6, width: "40%",
+              <div style={{ height: 10, background: "var(--bg-secondary)", borderRadius: 6, width: "40%",
                 animation: "pulse 1.5s ease-in-out infinite" }} />
-              <div style={{ height: 14, background: "#111", borderRadius: 6, width: "70%",
+              <div style={{ height: 14, background: "var(--bg-secondary)", borderRadius: 6, width: "70%",
                 animation: "pulse 1.5s ease-in-out infinite" }} />
-              <div style={{ height: 10, background: "#111", borderRadius: 6,
+              <div style={{ height: 10, background: "var(--bg-secondary)", borderRadius: 6,
                 animation: "pulse 1.5s ease-in-out infinite" }} />
-              <div style={{ height: 36, background: "#111", borderRadius: 10, marginTop: 4,
+              <div style={{ height: 36, background: "var(--bg-secondary)", borderRadius: 10, marginTop: 4,
                 animation: "pulse 1.5s ease-in-out infinite" }} />
             </div>
           </div>
@@ -54,14 +54,14 @@ const ProductGrid = ({ products, categories, loading }: Props) => {
       }}>
         <div style={{
           width: 80, height: 80, borderRadius: 20,
-          background: "#0a0a0a", border: "1px solid #1a1a1a",
+          background: "var(--bg-card)", border: "1px solid var(--border-color)",
           display: "flex", alignItems: "center", justifyContent: "center",
           fontSize: 32, marginBottom: 16,
         }}>📦</div>
-        <p style={{ fontSize: 16, fontWeight: 700, color: "#fff", margin: 0 }}>
+        <p style={{ fontSize: 16, fontWeight: 700, color: "var(--text-primary)", margin: 0 }}>
           No products found
         </p>
-        <p style={{ fontSize: 13, color: "#3f3f46", margin: "6px 0 0" }}>
+        <p style={{ fontSize: 13, color: "var(--text-secondary)", margin: "6px 0 0" }}>
           Try a different category or search term
         </p>
       </div>

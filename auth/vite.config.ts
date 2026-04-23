@@ -8,6 +8,7 @@ export default defineConfig({
     federation({
       name: "authApp",
       filename: "remoteEntry.js",
+      dts: false,
       exposes: { "./AuthApp": "./src/App" },
       shared: {
         react:              { singleton: true, requiredVersion: "^19.0.0" },

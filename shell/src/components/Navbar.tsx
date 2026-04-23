@@ -19,10 +19,15 @@ export default function Navbar() {
 
   const getThemeIcon = () => {
     switch (mode) {
-      case "midnight":
-        return "🌌";
-      default:
-        return "🌙";
+      case "light":    return "☀️";
+      default:         return "🌙";
+    }
+  };
+
+  const getThemeLabel = () => {
+    switch (mode) {
+      case "light":    return "Light";
+      default:         return "Dark";
     }
   };
 
@@ -46,15 +51,16 @@ export default function Navbar() {
         <div className="flex items-center gap-4">
           <button
             onClick={cycleTheme}
-            title={`Theme: ${mode}`}
-            className="p-2.5 rounded-xl border hover:scale-110 active:scale-95 transition-all"
+            title={`Theme: ${mode} → click to change`}
+            className="flex items-center gap-1.5 px-3 py-2 rounded-xl border hover:scale-105 active:scale-95 transition-all text-sm font-semibold"
             style={{
-              backgroundColor: "var(--bg-primary)",
+              backgroundColor: "var(--bg-secondary)",
               borderColor: "var(--border-color)",
-              fontSize: "18px",
+              color: "var(--text-secondary)",
             }}
           >
-            {getThemeIcon()}
+            <span style={{ fontSize: "16px" }}>{getThemeIcon()}</span>
+            <span className="hidden sm:inline text-xs">{getThemeLabel()}</span>
           </button>
 
           {/* Admin chat */}

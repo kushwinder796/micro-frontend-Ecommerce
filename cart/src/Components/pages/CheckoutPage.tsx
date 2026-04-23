@@ -164,23 +164,23 @@ const CheckoutPage = () => {
 
   const inputStyle = (field: string): React.CSSProperties => ({
     width: "100%", padding: "11px 14px",
-    background: "#0a0a0a",
-    border: focused === field ? "1px solid #7c3aed" : "1px solid #1a1a1a",
-    borderRadius: 10, color: "#f4f4f5", fontSize: 13,
+    background: "var(--bg-card)",
+    border: focused === field ? "1px solid #7c3aed" : "1px solid var(--border-color)",
+    borderRadius: 10, color: "var(--text-primary)", fontSize: 13,
     outline: "none", transition: "all 0.2s",
     boxShadow: focused === field ? "0 0 0 3px rgba(124,58,237,0.1)" : "none",
     boxSizing: "border-box",
   });
 
   const labelStyle: React.CSSProperties = {
-    fontSize: 11, fontWeight: 700, color: "#52525b",
+    fontSize: 11, fontWeight: 700, color: "var(--text-secondary)",
     textTransform: "uppercase", letterSpacing: 1,
     display: "block", marginBottom: 6,
   };
 
   return (
     <div style={{
-      minHeight: "100vh", background: "#050507",
+      minHeight: "100vh", background: "var(--bg-primary)",
       fontFamily: "'DM Sans', sans-serif", padding: "32px 24px",
     }}>
       <div style={{ maxWidth: 960, margin: "0 auto" }}>
@@ -192,10 +192,10 @@ const CheckoutPage = () => {
             onClick={() => window.location.href = "/cart"}
             className="bg-cyan-400 mb-4"
           >← Back to Cart</button>
-          <h1 style={{ fontSize: 26, fontWeight: 800, color: "#fff", margin: 0 }}>
+          <h1 style={{ fontSize: 26, fontWeight: 800, color: "var(--text-primary)", margin: 0 }}>
             Checkout
           </h1>
-          <p style={{ fontSize: 13, color: "#52525b", margin: "4px 0 0" }}>
+          <p style={{ fontSize: 13, color: "var(--text-secondary)", margin: "4px 0 0" }}>
             Fill shipping details to complete your order
           </p>
         </div>
@@ -205,11 +205,11 @@ const CheckoutPage = () => {
           {/* Form */}
           <form onSubmit={handlePlaceOrder}>
             <div style={{
-              background: "#0a0a0a", border: "1px solid #1a1a1a",
+              background: "var(--bg-card)", border: "1px solid var(--border-color)",
               borderRadius: 16, padding: 24, marginBottom: 16,
             }}>
               <p style={{
-                fontSize: 15, fontWeight: 700, color: "#fff",
+                fontSize: 15, fontWeight: 700, color: "var(--text-primary)",
                 margin: "0 0 20px", display: "flex", alignItems: "center", gap: 8,
               }}>
                 <span>📦</span> Shipping Details
@@ -276,7 +276,7 @@ const CheckoutPage = () => {
                       height: 300,
                       borderRadius: 12,
                       overflow: "hidden",
-                      border: "2px solid #27272a",
+                      border: "2px solid var(--border-color)",
                       position: "relative",
                       zIndex: 0,
                     }}
@@ -378,8 +378,8 @@ const CheckoutPage = () => {
           {/* Order Summary */}
           <div
             style={{
-              background: "#0a0a0a",
-              border: "1px solid #1a1a1a",
+              background: "var(--bg-card)",
+              border: "1px solid var(--border-color)",
               borderRadius: 16,
               padding: 20,
               position: "sticky",
@@ -391,7 +391,7 @@ const CheckoutPage = () => {
               style={{
                 fontSize: 15,
                 fontWeight: 700,
-                color: "#fff",
+                color: "var(--text-primary)",
                 margin: "0 0 16px",
               }}
             >
@@ -416,7 +416,7 @@ const CheckoutPage = () => {
                       width: 44,
                       height: 44,
                       borderRadius: 8,
-                      background: "#111",
+                      background: "var(--bg-secondary)",
                       flexShrink: 0,
                       overflow: "hidden",
                     }}
@@ -444,7 +444,7 @@ const CheckoutPage = () => {
                       style={{
                         fontSize: 12,
                         fontWeight: 600,
-                        color: "#fff",
+                        color: "var(--text-primary)",
                         margin: 0,
                         overflow: "hidden",
                         textOverflow: "ellipsis",
@@ -456,7 +456,7 @@ const CheckoutPage = () => {
                     <p
                       style={{
                         fontSize: 11,
-                        color: "#52525b",
+                        color: "var(--text-secondary)",
                         margin: "2px 0 0",
                       }}
                     >
@@ -478,7 +478,7 @@ const CheckoutPage = () => {
               ))}
             </div>
 
-            <div style={{ borderTop: "1px solid #1a1a1a", paddingTop: 14 }}>
+            <div style={{ borderTop: "1px solid var(--border-color)", paddingTop: 14 }}>
               <div
                 style={{
                   display: "flex",
@@ -486,13 +486,13 @@ const CheckoutPage = () => {
                   marginBottom: 8,
                 }}
               >
-                <span style={{ fontSize: 13, color: "#71717a" }}>Subtotal</span>
-                <span style={{ fontSize: 13, color: "#fff", fontWeight: 600 }}>
+                <span style={{ fontSize: 13, color: "var(--text-secondary)" }}>Subtotal</span>
+                <span style={{ fontSize: 13, color: "var(--text-primary)", fontWeight: 600 }}>
                   ₹{totalPrice().toLocaleString()}
                 </span>
               </div>
               <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 14 }}>
-                <span style={{ fontSize: 13, color: "#71717a" }}>Delivery</span>
+                <span style={{ fontSize: 13, color: "var(--text-secondary)" }}>Delivery</span>
                 <span
                   style={{ fontSize: 13, color: "#22c55e", fontWeight: 700 }}
                 >
@@ -500,7 +500,7 @@ const CheckoutPage = () => {
                 </span>
               </div>
               <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <span style={{ fontSize: 17, fontWeight: 800, color: "#fff" }}>Total</span>
+                <span style={{ fontSize: 17, fontWeight: 800, color: "var(--text-primary)" }}>Total</span>
                 <span style={{ fontSize: 19, fontWeight: 800, color: "#a855f7" }}>
                   ₹{totalPrice().toLocaleString()}
                 </span>
@@ -514,7 +514,7 @@ const CheckoutPage = () => {
               display: "flex", alignItems: "center", gap: 8,
             }}>
               <span style={{ fontSize: 16 }}>🔒</span>
-              <p style={{ fontSize: 11, color: "#52525b", margin: 0 }}>
+              <p style={{ fontSize: 11, color: "var(--text-secondary)", margin: 0 }}>
                 Secured by <strong style={{ color: "#22c55e" }}>Stripe</strong> · 256-bit SSL
               </p>
             </div>
@@ -525,7 +525,7 @@ const CheckoutPage = () => {
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700;800&display=swap');
         @keyframes spin { to { transform: rotate(360deg); } }
-        input::placeholder { color: #3f3f46; }
+        input::placeholder { color: var(--text-secondary); }
       `}</style>
     </div>
   );

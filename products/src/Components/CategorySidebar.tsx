@@ -9,8 +9,8 @@ interface Props {
 
 const CategorySidebar = ({ categories, active, onSelect, productCounts }: Props) => {
   return (
-    <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-4">
-      <p className="text-xs font-bold text-zinc-500 uppercase tracking-widest mb-3">
+    <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-2xl p-4">
+      <p className="text-xs font-bold text-[var(--text-secondary)] uppercase tracking-widest mb-3">
         Categories
       </p>
 
@@ -20,7 +20,7 @@ const CategorySidebar = ({ categories, active, onSelect, productCounts }: Props)
         className={`w-full text-left px-3 py-2.5 rounded-xl text-sm font-medium flex justify-between items-center mb-1 transition-all ${
           active === null
             ? "bg-cyan-500/10 text-cyan-400 border-l-2 border-cyan-500"
-            : "text-zinc-400 hover:text-white hover:bg-zinc-800"
+            : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-card)]"
         }`}
       >
         <span>🏪 All</span>
@@ -35,7 +35,7 @@ const CategorySidebar = ({ categories, active, onSelect, productCounts }: Props)
           className={`w-full text-left px-3 py-2.5 rounded-xl text-sm font-medium flex justify-between items-center mb-1 transition-all ${
             active === cat.id
               ? "bg-cyan-500/10 text-cyan-400 border-l-2 border-cyan-500"
-              : "text-zinc-400 hover:text-white hover:bg-zinc-800"
+              : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-card)]"
           }`}
         >
           <span>{cat.name}</span>

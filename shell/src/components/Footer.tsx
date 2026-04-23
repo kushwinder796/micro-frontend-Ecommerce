@@ -60,63 +60,99 @@ const Footer: React.FC = () => {
       {/* Top gradient line */}
       <div className="absolute top-0 left-0 right-0 h-px" style={{ background: 'linear-gradient(90deg, transparent, #06b6d4, #8b5cf6, transparent)' }} />
 
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
-        {/* Main Footer Content */}
-        <div className="py-16 grid grid-cols-2 md:grid-cols-6 gap-8 lg:gap-12">
-          {/* Brand Column */}
-          <div className="col-span-2">
-            <Link to="/" className="inline-block text-2xl font-black bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent mb-4">ECommerce</Link>
-            <p className="text-sm leading-relaxed mb-6 max-w-xs" style={{ color: 'var(--text-secondary)' }}>
+      <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 32px' }}>
+
+        {/* Main row — brand + links always on one line */}
+        <div style={{ display: 'flex', gap: 64, padding: '48px 0', alignItems: 'flex-start' }}>
+
+          {/* Brand */}
+          <div style={{ flexShrink: 0, width: 220 }}>
+            <Link to="/" className="inline-block text-2xl font-black bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent" style={{ marginBottom: 12 }}>
+              ECommerce
+            </Link>
+            <p style={{ fontSize: 13, lineHeight: 1.7, color: 'var(--text-secondary)', marginBottom: 20, marginTop: 8 }}>
               The next generation e-commerce platform built with micro-frontend architecture for blazing fast performance.
             </p>
-            {/* Social Links */}
-            <div className="flex gap-3">
+            <div style={{ display: 'flex', gap: 10 }}>
               {socialLinks.map((s, i) => (
-                <a key={i} href="#" aria-label={s.label} className="w-10 h-10 rounded-xl border flex items-center justify-center transition-all duration-300 hover:-translate-y-1 hover:border-cyan-500/50 hover:text-cyan-400 hover:shadow-lg hover:shadow-cyan-500/10" style={{ borderColor: 'var(--border-color)', color: 'var(--text-secondary)' }}>
+                <a
+                  key={i}
+                  href="#"
+                  aria-label={s.label}
+                  style={{
+                    width: 36, height: 36, borderRadius: 10,
+                    border: '1px solid var(--border-color)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    color: 'var(--text-secondary)', transition: 'all 0.2s',
+                  }}
+                  onMouseEnter={(e) => { e.currentTarget.style.borderColor = '#06b6d4'; e.currentTarget.style.color = '#06b6d4'; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'var(--border-color)'; e.currentTarget.style.color = 'var(--text-secondary)'; }}
+                >
                   {s.icon}
                 </a>
               ))}
             </div>
           </div>
 
-          {/* Link Columns */}
-          {Object.entries(footerLinks).map(([title, links]) => (
-            <div key={title}>
-              <h4 className="text-sm font-bold uppercase tracking-wider mb-5" style={{ color: 'var(--text-primary)' }}>{title}</h4>
-              <ul className="space-y-3">
-                {links.map((link) => (
-                  <li key={link.label}>
-                    <Link
-                      to={link.href}
-                      className="text-sm transition-all duration-200 inline-flex items-center gap-1"
-                      style={{ color: hoveredLink === link.label ? 'var(--accent-color)' : 'var(--text-secondary)' }}
-                      onMouseEnter={() => setHoveredLink(link.label)}
-                      onMouseLeave={() => setHoveredLink(null)}
-                    >
-                      <span className="transition-transform duration-200" style={{ transform: hoveredLink === link.label ? 'translateX(4px)' : 'translateX(0)' }}>
+          {/* Link columns — always in one row */}
+          <div style={{ flex: 1, display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 32 }}>
+            {Object.entries(footerLinks).map(([title, links]) => (
+              <div key={title}>
+                <h4 style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--text-primary)', marginBottom: 16, margin: '0 0 16px' }}>
+                  {title}
+                </h4>
+                <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 10 }}>
+                  {links.map((link) => (
+                    <li key={link.label}>
+                      <Link
+                        to={link.href}
+                        style={{
+                          fontSize: 13,
+                          color: hoveredLink === link.label ? 'var(--accent-color)' : 'var(--text-secondary)',
+                          textDecoration: 'none',
+                          transition: 'color 0.2s',
+                          display: 'inline-block',
+                          transform: hoveredLink === link.label ? 'translateX(4px)' : 'translateX(0)',
+                        }}
+                        onMouseEnter={() => setHoveredLink(link.label)}
+                        onMouseLeave={() => setHoveredLink(null)}
+                      >
                         {link.label}
-                      </span>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
         </div>
 
-        {/* Bottom Bar */}
-        <div className="py-8 border-t flex flex-col sm:flex-row items-center justify-between gap-4" style={{ borderColor: 'var(--border-color)' }}>
-          <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
-            © {new Date().getFullYear()} Dronaa Software llp ,ECommerce. All rights reserved.
+        {/* Bottom bar */}
+        <div style={{
+          borderTop: '1px solid var(--border-color)',
+          padding: '20px 0',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          gap: 16,
+        }}>
+          <p style={{ fontSize: 12, color: 'var(--text-secondary)', margin: 0 }}>
+            © {new Date().getFullYear()} Dronaa Software llp, ECommerce. All rights reserved.
           </p>
-          <div className="flex items-center gap-6">
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span className="text-xs font-medium" style={{ color: 'var(--text-secondary)' }}>All systems operational</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+              <div style={{ width: 7, height: 7, borderRadius: '50%', background: '#22c55e', animation: 'pulse 2s infinite' }} />
+              <span style={{ fontSize: 11, color: 'var(--text-secondary)', fontWeight: 500 }}>All systems operational</span>
             </div>
-            <div className="flex items-center gap-1.5">
-              {['visa', 'mastercard','paypal'].map((p) => (
-                <div key={p} className="px-2 py-1 rounded text-[9px] font-bold uppercase border" style={{ borderColor: 'var(--border-color)', color: 'var(--text-secondary)' }}>{p}</div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+              {['visa', 'mastercard', 'paypal'].map((p) => (
+                <div key={p} style={{
+                  padding: '3px 8px', borderRadius: 4, fontSize: 9, fontWeight: 700,
+                  textTransform: 'uppercase', border: '1px solid var(--border-color)',
+                  color: 'var(--text-secondary)',
+                }}>
+                  {p}
+                </div>
               ))}
             </div>
           </div>

@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-export type ThemeMode = "dark" | "midnight";
+export type ThemeMode = "dark" | "light" ;
 
 interface ThemeState {
   mode: ThemeMode;
@@ -15,14 +15,12 @@ export const useThemeStore = create<ThemeState>()(
       mode: "dark",
       setMode: (mode) => set({ mode }),
       cycleTheme: () => {
-        const modes: ThemeMode[] = ["dark", "midnight"];
+        const modes: ThemeMode[] = ["dark", "light"];
         const current = get().mode;
         const nextIndex = (modes.indexOf(current) + 1) % modes.length;
         set({ mode: modes[nextIndex] });
       },
     }),
-    {
-      name: "theme-storage",
-    }
+    { name: "theme-storage" }
   )
 );

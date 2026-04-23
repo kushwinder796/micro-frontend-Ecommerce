@@ -86,9 +86,9 @@ const ReceiptPage = () => {
               {
                 duration: 8000,
                 style: {
-                  background: "#0a0a0a",
-                  color: "#fff",
-                  border: "1px solid #27272a",
+                  background: "var(--bg-card)",
+                  color: "var(--text-primary)",
+                  border: "1px solid var(--border-color)",
                   fontSize: 14,
                 },
                 icon: "🚀",
@@ -108,9 +108,9 @@ const ReceiptPage = () => {
           toast.error(`Confirmation failed: ${errorMessage}`, {
             duration: 6000,
             style: {
-              background: "#0a0a0a",
-              color: "#fff",
-              border: "1px solid #7f1d1d",
+              background: "var(--bg-card)",
+              color: "var(--text-primary)",
+              border: "1px solid var(--border-color)",
               fontSize: 14,
             },
           });
@@ -127,7 +127,7 @@ const ReceiptPage = () => {
     <div
       style={{
         minHeight: "100vh",
-        background: "#050507",
+        background: "var(--bg-primary)",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -139,8 +139,8 @@ const ReceiptPage = () => {
         style={{
           maxWidth: 460,
           width: "100%",
-          background: "#0a0a0a",
-          border: "1px solid #1a1a1a",
+          background: "var(--bg-card)",
+          border: "1px solid var(--border-color)",
           borderRadius: 24,
           padding: "40px 36px",
           textAlign: "center",
@@ -164,25 +164,25 @@ const ReceiptPage = () => {
           ✅
         </div>
 
-        <h1 style={{ fontSize: 24, fontWeight: 800, color: "#fff", margin: "0 0 8px" }}>
+        <h1 style={{ fontSize: 24, fontWeight: 800, color: "var(--text-primary)", margin: "0 0 8px" }}>
           Your order is successfully done!
         </h1>
-        <p style={{ fontSize: 14, color: "#52525b", margin: "0 0 32px" }}>
+        <p style={{ fontSize: 14, color: "var(--text-secondary)", margin: "0 0 32px" }}>
           Your order has been placed successfully. Your expected shipping date is {shippingDate}.
         </p>
 
         {/* Receipt */}
         <div
           style={{
-            background: "#050507",
-            border: "1px solid #1a1a1a",
+            background: "var(--bg-primary)",
+            border: "1px solid var(--border-color)",
             borderRadius: 14,
             padding: "18px 20px",
             marginBottom: 28,
             textAlign: "left",
           }}
         >
-          <p style={{ fontSize: 10, fontWeight: 700, color: "#3f3f46", textTransform: "uppercase", letterSpacing: 1.5, margin: "0 0 14px" }}>
+          <p style={{ fontSize: 10, fontWeight: 700, color: "var(--text-secondary)", textTransform: "uppercase", letterSpacing: 1.5, margin: "0 0 14px" }}>
             Receipt
           </p>
           {[
@@ -194,10 +194,10 @@ const ReceiptPage = () => {
           ].map((row) => (
             <div
               key={row.label}
-              style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "9px 0", borderBottom: "1px solid #111" }}
+              style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "9px 0", borderBottom: "1px solid var(--border-color)" }}
             >
-              <span style={{ fontSize: 12, color: "#52525b" }}>{row.label}</span>
-              <span style={{ fontSize: 12, color: "#fff", fontWeight: 600 }}>{row.value}</span>
+              <span style={{ fontSize: 12, color: "var(--text-secondary)" }}>{row.label}</span>
+              <span style={{ fontSize: 12, color: "var(--text-primary)", fontWeight: 600 }}>{row.value}</span>
             </div>
           ))}
         </div>
@@ -205,19 +205,19 @@ const ReceiptPage = () => {
         {/* Delivery Map */}
         <div
           style={{
-            background: "#050507",
-            border: "1px solid #1a1a1a",
+            background: "var(--bg-primary)",
+            border: "1px solid var(--border-color)",
             borderRadius: 14,
             padding: "18px 20px",
             marginBottom: 28,
             textAlign: "left",
           }}
         >
-          <p style={{ fontSize: 10, fontWeight: 700, color: "#3f3f46", textTransform: "uppercase", letterSpacing: 1.5, margin: "0 0 14px", display: "flex", justifyContent: "space-between" }}>
+          <p style={{ fontSize: 10, fontWeight: 700, color: "var(--text-secondary)", textTransform: "uppercase", letterSpacing: 1.5, margin: "0 0 14px", display: "flex", justifyContent: "space-between" }}>
             <span>Delivery Location</span>
             <span style={{ color: "#22c55e" }}>📍 {shippingAddress.slice(0, 25)}{shippingAddress.length > 25 ? "..." : ""}</span>
           </p>
-          <div style={{ width: "100%", height: 180, borderRadius: 10, overflow: "hidden", border: "1px solid #1a1a1a", background: "#111" }}>
+          <div style={{ width: "100%", height: 180, borderRadius: 10, overflow: "hidden", border: "1px solid var(--border-color)", background: "var(--bg-secondary)" }}>
             <iframe
               width="100%"
               height="100%"
@@ -240,7 +240,7 @@ const ReceiptPage = () => {
           </button>
           <button
             onClick={() => window.print()}
-            style={{ padding: "12px 0", borderRadius: 12, border: "1px solid #27272a", background: "transparent", color: "#71717a", fontSize: 13, fontWeight: 600, cursor: "pointer" }}
+            style={{ padding: "12px 0", borderRadius: 12, border: "1px solid var(--border-color)", background: "transparent", color: "var(--text-secondary)", fontSize: 13, fontWeight: 600, cursor: "pointer" }}
           >
             Print Receipt
           </button>

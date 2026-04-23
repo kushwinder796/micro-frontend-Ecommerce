@@ -7,6 +7,7 @@ export default defineConfig({
     federation({
       name: "cartApp",
       filename: "remoteEntry.js",
+      dts: false,
       exposes: { "./CartApp": "./src/App" },
       shared: {
         react:              { singleton: true, requiredVersion: "^19.0.0" },

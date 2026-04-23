@@ -8,6 +8,7 @@ export default defineConfig({
     federation({
       name: "productsApp",
       filename: "remoteEntry.js",
+      dts: false,
       exposes: { "./ProductsApp": "./src/Components/ProductsApp.tsx" },
       shared: {
         react:              { singleton: true, requiredVersion: "^19.0.0" },

@@ -7,7 +7,7 @@ const features = [
     description:
       'Smart product recommendations and intelligent search powered by cutting-edge machine learning.',
     gradient: 'from-violet-500 to-purple-600',
-    bgGlow: '#8b5cf6',
+    bgGlow: '#9669fd',
   },
   {
     icon: '💳',
@@ -15,7 +15,7 @@ const features = [
     description:
       'Multiple payment gateways with Stripe, PayPal, and crypto. Instant refunds and dispute resolution.',
     gradient: 'from-cyan-500 to-blue-600',
-    bgGlow: '#06b6d4',
+    bgGlow: '#10bfde',
   },
   {
     icon: '💬',
@@ -23,7 +23,7 @@ const features = [
     description:
       'Instant customer support with AI chatbot and human agents available 24/7 via real-time SignalR.',
     gradient: 'from-blue-500 to-indigo-600',
-    bgGlow: '#3b82f6',
+    bgGlow: '#2d77f0',
   },
 ];
 
@@ -61,8 +61,7 @@ const FeaturesSection: React.FC = () => {
           </p>
         </div>
 
-        {/* Features Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24 }}>
           {features.map((feature, i) => (
             <div
               key={i}

@@ -46,7 +46,7 @@ const AdminProductPage = () => {
   return (
     <div style={{
       height: "calc(100vh - 64px)",
-      background: "#050507",
+      background: "var(--bg-primary)",
       display: "flex",
       overflow: "hidden",
       fontFamily: "'DM Sans', sans-serif",
@@ -56,7 +56,7 @@ const AdminProductPage = () => {
       <div style={{
         width: 300,
         flexShrink: 0,
-        borderRight: "1px solid #111",
+        borderRight: "1px solid var(--border-color)",
         display: "flex",
         flexDirection: "column",
         overflow: "hidden",
@@ -65,8 +65,8 @@ const AdminProductPage = () => {
         {/* Admin header */}
         <div style={{
           padding: "20px 20px 16px",
-          borderBottom: "1px solid #111",
-          background: "linear-gradient(180deg,#0f0a1a,#050507)",
+          borderBottom: "1px solid var(--border-color)",
+          background: "linear-gradient(180deg, var(--bg-secondary), var(--bg-primary))",
         }}>
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
             <div style={{
@@ -76,21 +76,21 @@ const AdminProductPage = () => {
               fontSize: 17, boxShadow: "0 0 20px rgba(109,40,217,0.4)",
             }}>🔧</div>
             <div>
-              <p style={{ fontSize: 14, fontWeight: 700, color: "#fff", margin: 0 }}>Admin Panel</p>
+              <p style={{ fontSize: 14, fontWeight: 700, color: "var(--text-primary)", margin: 0 }}>Admin Panel</p>
               <div style={{ display: "flex", alignItems: "center", gap: 5, marginTop: 2 }}>
                 <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#22c55e", display: "inline-block" }} />
-                <span style={{ fontSize: 11, color: "#52525b" }}>{products.length} products live</span>
+                <span style={{ fontSize: 11, color: "var(--text-secondary)" }}>{products.length} products live</span>
               </div>
             </div>
           </div>
         </div>
 
         {/* Tabs */}
-        <div style={{ padding: "12px 16px", borderBottom: "1px solid #111" }}>
+        <div style={{ padding: "12px 16px", borderBottom: "1px solid var(--border-color)" }}>
           <div style={{
             display: "grid", gridTemplateColumns: "1fr 1fr 1fr",
-            gap: 4, background: "#0a0a0a", borderRadius: 10, padding: 3,
-            border: "1px solid #1a1a1a",
+            gap: 4, background: "var(--bg-card)", borderRadius: 10, padding: 3,
+            border: "1px solid var(--border-color)",
           }}>
             {(["category", "product", "offer"] as const).map((tab) => (
               <button key={tab} onClick={() => setActiveTab(tab)} style={{
@@ -100,7 +100,7 @@ const AdminProductPage = () => {
                 background: activeTab === tab
                   ? "linear-gradient(135deg,#6d28d9,#7c3aed)"
                   : "transparent",
-                color: activeTab === tab ? "#fff" : "#3f3f46",
+                color: activeTab === tab ? "#fff" : "var(--text-secondary)",
                 boxShadow: activeTab === tab ? "0 2px 10px rgba(109,40,217,0.3)" : "none",
                 display: "flex", alignItems: "center", justifyContent: "center", gap: 5,
               }}>
@@ -134,17 +134,17 @@ const AdminProductPage = () => {
         {/* Top bar */}
         <div style={{
           padding: "16px 24px",
-          borderBottom: "1px solid #111",
+          borderBottom: "1px solid var(--border-color)",
           display: "flex", alignItems: "center",
           justifyContent: "space-between",
           flexShrink: 0,
-          background: "#050507",
+          background: "var(--bg-primary)",
         }}>
           <div>
-            <h1 style={{ fontSize: 20, fontWeight: 800, color: "#fff", margin: 0 }}>
+            <h1 style={{ fontSize: 20, fontWeight: 800, color: "var(--text-primary)", margin: 0 }}>
               Manage Products
             </h1>
-            <p style={{ fontSize: 18, color: "#3f3f46", margin: "3px 0 0" }}>
+            <p style={{ fontSize: 18, color: "var(--text-secondary)", margin: "3px 0 0" }}>
               {filtered.length} of {products.length} products
               {activeCategory !== null && " · filtered"}
             </p>
@@ -154,7 +154,7 @@ const AdminProductPage = () => {
           <div style={{ position: "relative" }}>
             <span style={{
               position: "absolute", left: 12, top: "50%",
-              transform: "translateY(-50%)", fontSize: 14, color: "#3f3f46",
+              transform: "translateY(-50%)", fontSize: 14, color: "var(--text-secondary)",
             }}>🔍</span>
             <input
               value={search}
@@ -162,12 +162,12 @@ const AdminProductPage = () => {
               placeholder="Search products..."
               style={{
                 paddingLeft: 36, paddingRight: 14, paddingTop: 9, paddingBottom: 9,
-                background: "#0a0a0a", border: "1px solid #1a1a1a",
-                borderRadius: 10, color: "#fff", fontSize: 20, outline: "none",
+                background: "var(--bg-card)", border: "1px solid var(--border-color)",
+                borderRadius: 10, color: "var(--text-primary)", fontSize: 20, outline: "none",
                 width: 220, transition: "border 0.2s",
               }}
               onFocus={(e) => e.currentTarget.style.borderColor = "#6d28d9"}
-              onBlur={(e) => e.currentTarget.style.borderColor = "#1a1a1a"}
+              onBlur={(e) => e.currentTarget.style.borderColor = "var(--border-color)"}
             />
           </div>
         </div>
@@ -175,7 +175,7 @@ const AdminProductPage = () => {
         {/* Stats row */}
         <div style={{
           display: "flex", gap: 12, padding: "12px 24px",
-          borderBottom: "1px solid #111", flexShrink: 0,
+          borderBottom: "1px solid var(--border-color)", flexShrink: 0,
         }}>
           {[
             { label: "Total Products", value: products.length, color: "#7c3aed" },
@@ -184,7 +184,7 @@ const AdminProductPage = () => {
           ].map((stat) => (
             <div key={stat.label} style={{
               flex: 1, padding: "10px 14px", borderRadius: 10,
-              background: "#0a0a0a", border: "1px solid #1a1a1a",
+              background: "var(--bg-card)", border: "1px solid var(--border-color)",
               display: "flex", alignItems: "center", gap: 10,
             }}>
               <div style={{
@@ -192,10 +192,10 @@ const AdminProductPage = () => {
                 background: stat.color, flexShrink: 0,
               }} />
               <div>
-                <p style={{ fontSize: 18, fontWeight: 800, color: "#fff", margin: 0, lineHeight: 1 }}>
+                <p style={{ fontSize: 18, fontWeight: 800, color: "var(--text-primary)", margin: 0, lineHeight: 1 }}>
                   {stat.value}
                 </p>
-                <p style={{ fontSize: 10, color: "#3f3f46", margin: "3px 0 0", fontWeight: 600 }}>
+                <p style={{ fontSize: 10, color: "var(--text-secondary)", margin: "3px 0 0", fontWeight: 600 }}>
                   {stat.label}
                 </p>
               </div>
@@ -212,7 +212,7 @@ const AdminProductPage = () => {
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800&display=swap');
         ::-webkit-scrollbar { display: none; }
-        input::placeholder { color: #3f3f46; }
+        input::placeholder { color: var(--text-secondary); }
       `}</style>
     </div>
   );

@@ -43,7 +43,7 @@ const App = () => {
   return (
     <div className="w-full min-h-screen transition-colors duration-300" style={{ backgroundColor: 'var(--bg-primary)', color: 'var(--text-primary)' }}>
       <Navbar />
-      <main className="max-w-screen-2xl mx-auto px-4">
+      <main>
         <ErrorBoundary>
           <Suspense fallback={<Spinner />}>
             <Routes>

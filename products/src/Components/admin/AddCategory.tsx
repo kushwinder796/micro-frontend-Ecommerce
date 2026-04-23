@@ -71,11 +71,11 @@ const AddCategory = ({ categories, onSuccess }: Props) => {
   const inputStyle = (field: string): React.CSSProperties => ({
     width: "100%",
     padding: "10px 14px",
-    background: "#09090b",
+    background: "var(--bg-primary)",
     border:
-      focused === field ? "1px solid rgba(6,182,212,0.6)" : "1px solid #27272a",
+      focused === field ? "1px solid rgba(6,182,212,0.6)" : "1px solid var(--border-color)",
     borderRadius: 10,
-    color: "#f4f4f5",
+    color: "var(--text-primary)",
     fontSize: 13,
     outline: "none",
     transition: "all 0.2s",
@@ -87,8 +87,8 @@ const AddCategory = ({ categories, onSuccess }: Props) => {
     <>
       <div
         style={{
-          background: "linear-gradient(145deg,#18181b,#1c1c1f)",
-          border: "1px solid #27272a",
+          background: "var(--bg-secondary)",
+          border: "1px solid var(--border-color)",
           borderRadius: 20,
           padding: 20,
           maxWidth: 420,
@@ -119,10 +119,10 @@ const AddCategory = ({ categories, onSuccess }: Props) => {
             📁
           </div>
           <div>
-            <p style={{ fontSize: 14, fontWeight: 700, color: "#f4f4f5" }}>
+            <p style={{ fontSize: 14, fontWeight: 700, color: "var(--text-primary)" }}>
               Categories
             </p>
-            <p style={{ fontSize: 11, color: "#52525b" }}>
+            <p style={{ fontSize: 11, color: "var(--text-secondary)" }}>
               {categories.length} total
             </p>
           </div>
@@ -143,7 +143,7 @@ const AddCategory = ({ categories, onSuccess }: Props) => {
               style={{
                 fontSize: 10,
                 fontWeight: 700,
-                color: "#52525b",
+                color: "var(--text-secondary)",
                 textTransform: "uppercase",
                 letterSpacing: 1,
                 display: "block",
@@ -167,7 +167,7 @@ const AddCategory = ({ categories, onSuccess }: Props) => {
               style={{
                 fontSize: 10,
                 fontWeight: 700,
-                color: "#52525b",
+                color: "var(--text-secondary)",
                 textTransform: "uppercase",
                 letterSpacing: 1,
                 display: "block",
@@ -195,7 +195,7 @@ const AddCategory = ({ categories, onSuccess }: Props) => {
               border: "none",
               background: name.trim()
                 ? "linear-gradient(135deg,#0891b2,#2563eb)"
-                : "#27272a",
+                : "var(--border-color)",
               color: "#fff",
               fontSize: 13,
               fontWeight: 700,
@@ -237,7 +237,7 @@ const AddCategory = ({ categories, onSuccess }: Props) => {
             style={{
               fontSize: 10,
               fontWeight: 700,
-              color: "#52525b",
+              color: "var(--text-secondary)",
               textTransform: "uppercase",
               letterSpacing: 1,
               marginBottom: 8,
@@ -258,7 +258,7 @@ const AddCategory = ({ categories, onSuccess }: Props) => {
               <p
                 style={{
                   fontSize: 12,
-                  color: "#3f3f46",
+                  color: "var(--text-secondary)",
                   textAlign: "center",
                   padding: "12px 0",
                 }}
@@ -274,8 +274,8 @@ const AddCategory = ({ categories, onSuccess }: Props) => {
                     alignItems: "center",
                     justifyContent: "space-between",
                     padding: "8px 12px",
-                    background: "#09090b",
-                    border: "1px solid #27272a",
+                    background: "var(--bg-primary)",
+                    border: "1px solid var(--border-color)",
                     borderRadius: 10,
                   }}
                 >
@@ -284,13 +284,13 @@ const AddCategory = ({ categories, onSuccess }: Props) => {
                       style={{
                         fontSize: 13,
                         fontWeight: 600,
-                        color: "#f4f4f5",
+                        color: "var(--text-primary)",
                       }}
                     >
                       {cat.name}
                     </p>
                     {cat.description && (
-                      <p style={{ fontSize: 11, color: "#52525b" }}>
+                      <p style={{ fontSize: 11, color: "var(--text-secondary)" }}>
                         {cat.description}
                       </p>
                     )}
@@ -338,8 +338,8 @@ const AddCategory = ({ categories, onSuccess }: Props) => {
         >
           <div
             style={{
-              background: "linear-gradient(145deg,#18181b,#1c1c1f)",
-              border: "1px solid #27272a",
+              background: "var(--bg-secondary)",
+              border: "1px solid var(--border-color)",
               borderRadius: 20,
               padding: 24,
               maxWidth: 420,
@@ -379,7 +379,7 @@ const AddCategory = ({ categories, onSuccess }: Props) => {
                   style={{
                     fontSize: 16,
                     fontWeight: 700,
-                    color: "#f4f4f5",
+                    color: "var(--text-primary)",
                     margin: "0 0 4px 0",
                   }}
                 >
@@ -388,7 +388,7 @@ const AddCategory = ({ categories, onSuccess }: Props) => {
                 <p
                   style={{
                     fontSize: 13,
-                    color: "#71717a",
+                    color: "var(--text-secondary)",
                     margin: 0,
                     lineHeight: 1.5,
                   }}
@@ -402,8 +402,8 @@ const AddCategory = ({ categories, onSuccess }: Props) => {
             {/* Category Info */}
             <div
               style={{
-                background: "#09090b",
-                border: "1px solid #27272a",
+                background: "var(--bg-primary)",
+                border: "1px solid var(--border-color)",
                 borderRadius: 12,
                 padding: 12,
                 marginBottom: 20,
@@ -413,7 +413,7 @@ const AddCategory = ({ categories, onSuccess }: Props) => {
                 style={{
                   fontSize: 11,
                   fontWeight: 700,
-                  color: "#52525b",
+                  color: "var(--text-secondary)",
                   textTransform: "uppercase",
                   letterSpacing: 1,
                   marginBottom: 6,
@@ -425,7 +425,7 @@ const AddCategory = ({ categories, onSuccess }: Props) => {
                 style={{
                   fontSize: 14,
                   fontWeight: 600,
-                  color: "#f4f4f5",
+                  color: "var(--text-primary)",
                   margin: 0,
                 }}
               >
@@ -435,7 +435,7 @@ const AddCategory = ({ categories, onSuccess }: Props) => {
                 <p
                   style={{
                     fontSize: 12,
-                    color: "#71717a",
+                    color: "var(--text-secondary)",
                     margin: "4px 0 0 0",
                   }}
                 >
@@ -452,19 +452,19 @@ const AddCategory = ({ categories, onSuccess }: Props) => {
                   flex: 1,
                   padding: "10px 0",
                   borderRadius: 10,
-                  border: "1px solid #27272a",
-                  background: "#18181b",
-                  color: "#f4f4f5",
+                  border: "1px solid var(--border-color)",
+                  background: "var(--bg-secondary)",
+                  color: "var(--text-primary)",
                   fontSize: 13,
                   fontWeight: 700,
                   cursor: "pointer",
                   transition: "all 0.2s",
                 }}
                 onMouseEnter={(e) =>
-                  (e.currentTarget.style.background = "#27272a")
+                  (e.currentTarget.style.background = "var(--border-color)")
                 }
                 onMouseLeave={(e) =>
-                  (e.currentTarget.style.background = "#18181b")
+                  (e.currentTarget.style.background = "var(--bg-secondary)")
                 }
               >
                 Cancel

@@ -10,7 +10,6 @@ interface Props {
 
 const ProductCard = ({ product, categoryName }: Props) => {
   const addToCart = useCartStore((s: CartStore) => s.addToCart);
-  const stock = product.stock ?? 0;
   const [imgError, setImgError] = useState(false);
   const userStr = localStorage.getItem("user");
   const user = userStr ? JSON.parse(userStr) : null;
@@ -57,16 +56,6 @@ const ProductCard = ({ product, categoryName }: Props) => {
               {Math.round((1 - activeOffer.offeredPrice / product.price) * 100)}% OFF
             </div>
           )}
-
-          <div
-            className={`absolute top-3 right-3 px-2 py-1 rounded-lg text-xs font-bold backdrop-blur-sm ${
-              stock > 0
-                ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
-                : "bg-red-500/20 text-red-400 border border-red-500/30"
-            }`}
-          >
-            {stock > 0 ? `${stock} in stock` : "Out of stock"}
-          </div>
         </div>
   
         {/* Content */}

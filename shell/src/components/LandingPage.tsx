@@ -2,7 +2,7 @@ import HeroSection from './landing/HeroSection';
 import FeaturesSection from './landing/FeaturesSection';
 import StatsSection from './landing/StatsSection';
 import TestimonialsSection from './landing/TestimonialsSection';
-import CTASection from './landing/CTASection';
+
 import LogoMarquee from './LogoMarquee';
 
 const LandingPage: React.FC = () => {
@@ -32,9 +32,6 @@ const LandingPage: React.FC = () => {
 
       {/* Testimonials */}
       <TestimonialsSection />
-
-      {/* CTA */}
-      <CTASection />
     </div>
   );
 };
