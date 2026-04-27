@@ -34,10 +34,10 @@ const stats = [
 ];
 
 const StatsSection: React.FC = () => (
-  <section className="relative py-24">
+  <section className="relative py-14">
     <div className="absolute inset-0 -z-10 border-y" style={{ backgroundColor: 'var(--bg-secondary)', borderColor: 'var(--border-color)' }} />
     <div className="mx-auto max-w-7xl px-6 lg:px-8">
-      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-7">
         {stats.map((s, i) => (
           <div key={i} className="group text-center p-8 rounded-2xl border transition-all duration-500 hover:-translate-y-2 hover:shadow-xl" style={{ borderColor: 'var(--border-color)', backgroundColor: 'var(--bg-primary)' }}>
             <div className="w-16 h-16 mx-auto rounded-2xl flex items-center justify-center text-3xl mb-6 transition-transform duration-300 group-hover:scale-110" style={{ background: `linear-gradient(135deg, ${s.color}15, 

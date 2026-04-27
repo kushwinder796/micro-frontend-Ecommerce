@@ -26,8 +26,8 @@ export default function Navbar() {
 
   const getThemeLabel = () => {
     switch (mode) {
-      case "light":    return "Light";
-      default:         return "Dark";
+      case "light":    return "";
+      default:         return "";
     }
   };
 
