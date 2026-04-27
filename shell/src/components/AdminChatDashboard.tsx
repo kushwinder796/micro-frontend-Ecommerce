@@ -1,6 +1,6 @@
-
 import React, { useState, useMemo } from "react";
 import { useChatStore, type ChatMessage } from "../store/useChatStore";
+import { useThemeStore } from "../store/useThemeStore";
 import { signalRService } from "../api/signalrService";
 import axios from "axios";
 import { getToken, getUser } from "../utils/auth";
@@ -16,7 +16,6 @@ type BackendMessage = {
   targetUserId?: string;
   status?: string;
   parentMessageId?: string;
-  reactions?: string;
 };
 
 type BackendConversation = {
@@ -38,6 +37,8 @@ const AdminChatDashboard: React.FC = () => {
   } = useChatStore();
   const adminUser = getUser();
   const token = getToken();
+  // Subscribe to theme so component re-renders when theme changes
+  useThemeStore((s) => s.mode);
 
 
   const [replyText, setReplyText] = useState("");
@@ -115,7 +116,6 @@ const scrollToBottom = () => {
               timestamp: m.createdAt || new Date().toISOString(),
               role: isUser ? "User" : "Admin",
               parentMessageId: m.parentMessageId,
-              reactions: m.reactions,
               status: (m.status?.toLowerCase() as "sent" | "delivered" | "read") || "sent",
               productInfo: conv.product ? {
                 id: conv.product.id,
@@ -170,25 +170,6 @@ const scrollToBottom = () => {
     setReplyingTo(null);
   };
 
-  const handleAddReaction = (messageId: string, emoji: string) => {
-    signalRService.addReaction(messageId, emoji);
-  };
-
-  const renderReactions = (reactionsJson?: string) => {
-    if (!reactionsJson) return null;
-    try {
-      const reactions: Record<string, string[]> = JSON.parse(reactionsJson);
-      return (
-        <div className="flex flex-wrap gap-1 mt-1">
-          {Object.entries(reactions).map(([emoji, userIds]) => (
-            <span key={emoji} className="bg-zinc-800 rounded-full px-2 py-0.5 text-[10px] border border-zinc-700">
-              {emoji} {userIds.length}
-            </span>
-          ))}
-        </div>
-      );
-    } catch { return null; }
-  };
   React.useEffect(() => {
   if (activeConversationId) {
     scrollToBottom();
@@ -197,19 +178,35 @@ const scrollToBottom = () => {
 
 
   return (
-    <div className="flex h-[700px] w-[1000px] bg-zinc-900 border border-zinc-700 rounded-2xl shadow-2xl overflow-hidden relative font-sans text-zinc-100">
-      <div className="w-80 border-r border-zinc-800 flex flex-col bg-zinc-950">
-        <div className="p-6 border-b border-zinc-800">
+    <div style={{
+      display: "flex", height: 700, width: 1000,
+      background: "var(--bg-secondary)",
+      border: "1px solid var(--border-color)",
+      borderRadius: 20, boxShadow: "0 25px 60px rgba(0,0,0,0.3)",
+      overflow: "hidden", fontFamily: "sans-serif",
+      color: "var(--text-primary)",
+    }}>
+      
+      {/* ── Sidebar ── */}
+      <div style={{
+        width: 300, flexShrink: 0,
+        borderRight: "1px solid var(--border-color)",
+        display: "flex", flexDirection: "column",
+        background: "var(--bg-primary)",
+      }}>
+        <div style={{ padding: "20px 24px", borderBottom: "1px solid var(--border-color)" }}>
           <h2 className="text-xl font-bold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
             Admin Support
           </h2>
-          <p className="text-xs text-zinc-500 mt-1">Manage active customer inquiries</p>
+          <p style={{ fontSize: 12, color: "var(--text-secondary)", margin: "4px 0 0" }}>
+            Manage active customer inquiries
+          </p>
         </div>
-        <div className="flex-1 overflow-y-auto custom-scrollbar scrollbar-thin scrollbar-thumb-zinc-700 scrollbar-track-zinc-900">
+        <div style={{ flex: 1, overflowY: "auto" }} className="custom-scrollbar">
           {conversations.length === 0 ? (
-            <div className="p-10 text-center text-zinc-600">
-              <div className="text-3xl mb-2">📭</div>
-              <p className="text-sm">No active chats</p>
+            <div style={{ padding: 40, textAlign: "center", color: "var(--text-secondary)" }}>
+              <div style={{ fontSize: 28, marginBottom: 8 }}>📭</div>
+              <p style={{ fontSize: 13, margin: 0 }}>No active chats</p>
             </div>
           ) : (
             conversations.map((conv) => (
@@ -218,149 +215,172 @@ const scrollToBottom = () => {
                 onClick={() => {
                   setActiveUserId(conv.userId);
                   useChatStore.getState().setActiveConversationId(conv.conversationId);
-                  setTimeout(()=>{
-                    scrollToBottom();
-                  },100)
+                  setTimeout(() => scrollToBottom(), 100);
                 }}
-                className={`p-4 border-b border-zinc-900/50 cursor-pointer transition-all duration-200 hover:bg-zinc-900 ${
-                  activeConversationId === conv.conversationId
-                    ? "bg-zinc-900 border-l-4 border-cyan-500 shadow-inner"
-                    : ""
-                }`}
+                style={{
+                  padding: "14px 16px",
+                  borderBottom: "1px solid var(--border-color)",
+                  cursor: "pointer",
+                  transition: "background 0.15s",
+                  background: activeConversationId === conv.conversationId
+                    ? "var(--bg-secondary)"
+                    : "transparent",
+                  borderLeft: activeConversationId === conv.conversationId
+                    ? "3px solid #06b6d4"
+                    : "3px solid transparent",
+                }}
+                onMouseEnter={(e) => { if (activeConversationId !== conv.conversationId) (e.currentTarget as HTMLDivElement).style.background = "var(--bg-secondary)"; }}
+                onMouseLeave={(e) => { if (activeConversationId !== conv.conversationId) (e.currentTarget as HTMLDivElement).style.background = "transparent"; }}
               >
-                <div className="flex justify-between items-start mb-1">
-                  <span className="font-semibold text-sm">{conv.userName}</span>
-                  <span className="text-[10px] text-zinc-600">
-                    {new Date(conv.lastMessage.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}>
+                  <span style={{ fontWeight: 600, fontSize: 13, color: "var(--text-primary)" }}>{conv.userName}</span>
+                  <span style={{ fontSize: 10, color: "var(--text-secondary)" }}>
+                    {new Date(conv.lastMessage.timestamp).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
                   </span>
                 </div>
-                <p className="text-xs text-zinc-500 truncate">
-                  {conv.lastMessage.role === 'Admin' ? 'You: ' : ''}{conv.lastMessage.text}
+                <p style={{ fontSize: 12, color: "var(--text-secondary)", margin: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                  {conv.lastMessage.role === "Admin" ? "You: " : ""}{conv.lastMessage.text}
                 </p>
-                <div ref={messagesEndRef} />
               </div>
             ))
           )}
         </div>
       </div>
 
-      <div className="flex-1 flex flex-col bg-[#0b0b0b]">
+      {/* ── Main ── */}
+      <div style={{ flex: 1, display: "flex", flexDirection: "column", background: "var(--bg-primary)", minWidth: 0 }}>
         {activeConversationId && activeUserId ? (
           <>
             {/* Header */}
-            <div className="p-4 border-b border-zinc-800 bg-zinc-950/50 flex justify-between items-center backdrop-blur-md">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center text-white font-bold">
-                  {conversations.find(c => c.conversationId === activeConversationId)?.userName[0] || 'U'}
+            <div style={{
+              padding: "14px 20px",
+              borderBottom: "1px solid var(--border-color)",
+              background: "var(--bg-secondary)",
+              display: "flex", justifyContent: "space-between", alignItems: "center",
+            }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                <div style={{
+                  width: 38, height: 38, borderRadius: "50%",
+                  background: "linear-gradient(135deg,#06b6d4,#2563eb)",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  color: "#fff", fontWeight: 700, fontSize: 16,
+                }}>
+                  {conversations.find(c => c.conversationId === activeConversationId)?.userName[0] || "U"}
                 </div>
                 <div>
-                  <h3 className="font-bold text-sm">
+                  <h3 style={{ fontSize: 14, fontWeight: 700, color: "var(--text-primary)", margin: 0 }}>
                     {conversations.find(c => c.conversationId === activeConversationId)?.userName || "Customer"}
                   </h3>
-                  <div className="flex items-center gap-1.5 ">
-                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                    <span className="text-[10px] text-zinc-500">Active now</span>
+                  <div style={{ display: "flex", alignItems: "center", gap: 5, marginTop: 2 }}>
+                    <span style={{ width: 7, height: 7, borderRadius: "50%", background: "#22c55e", display: "inline-block", animation: "pulse 2s infinite" }} />
+                    <span style={{ fontSize: 10, color: "var(--text-secondary)" }}>Active now</span>
                   </div>
                 </div>
               </div>
-              <button 
+              <button
                 onClick={() => setIsAdminChatOpen(false)}
-                className="p-2 hover:bg-zinc-800 rounded-full transition-colors text-zinc-400"
+                style={{ background: "none", border: "none", cursor: "pointer", color: "var(--text-secondary)", fontSize: 18, padding: 6, borderRadius: 8 }}
+                onMouseEnter={(e) => (e.currentTarget.style.background = "var(--border-color)")}
+                onMouseLeave={(e) => (e.currentTarget.style.background = "none")}
               >
                 ✕
               </button>
             </div>
 
             {/* Messages */}
-            <div className="flex-1 overflow-y-auto p-6 space-y-6 custom-scrollbar scrollbar-thin scrollbar-thumb-zinc-700 scrollbar-track-zinc-900">
+            <div style={{ flex: 1, overflowY: "auto", padding: "20px 24px", display: "flex", flexDirection: "column", gap: 16 }} className="custom-scrollbar">
               {activeMessages.map((msg) => (
                 <div
                   key={msg.id}
-                  className={`flex flex-col ${msg.role === "Admin" ? "items-end" : "items-start"} group relative`}
+                  style={{ display: "flex", flexDirection: "column", alignItems: msg.role === "Admin" ? "flex-end" : "flex-start" }}
                 >
-                  <div className={`max-w-[75%] rounded-2xl px-4 py-3 text-sm transition-all duration-200 group-hover:shadow-lg ${
-                    msg.role === "Admin"
-                      ? "bg-cyan-600 text-white rounded-tr-none shadow-cyan-900/20"
-                      : "bg-zinc-800/80 text-zinc-200 border border-zinc-700/50 rounded-tl-none shadow-black/20"
-                  }`}>
-                    {/* Reply Context */}
+                  <div style={{
+                    maxWidth: "75%",
+                    borderRadius: msg.role === "Admin" ? "18px 18px 4px 18px" : "18px 18px 18px 4px",
+                    padding: "10px 14px", fontSize: 13,
+                    background: msg.role === "Admin"
+                      ? "linear-gradient(135deg,#0891b2,#2563eb)"
+                      : "var(--bg-secondary)",
+                    color: msg.role === "Admin" ? "#fff" : "var(--text-primary)",
+                    border: msg.role === "Admin" ? "none" : "1px solid var(--border-color)",
+                  }}>
                     {msg.parentMessageId && (
-                      <div className="mb-2 p-2 bg-black/20 rounded-lg text-[11px] border-l-2 border-white/30 italic">
+                      <div style={{
+                        marginBottom: 6, padding: "4px 8px",
+                        background: "rgba(0,0,0,0.15)", borderRadius: 6,
+                        fontSize: 10, borderLeft: "2px solid rgba(255,255,255,0.3)",
+                        fontStyle: "italic", opacity: 0.7,
+                      }}>
                         {messages.find(m => m.id === msg.parentMessageId)?.text.substring(0, 40) || "Original message"}...
                       </div>
                     )}
-
                     {msg.productInfo && (
-                      <div className="mb-3 p-3 bg-zinc-900/50 rounded-xl border border-zinc-700/50 border-l-4 border-emerald-500 text-xs shadow-inner">
-                        <div className="font-bold text-emerald-400 mb-1 flex items-center gap-1.5">
-                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                          Product Inquiry
-                        </div>
-                        <div className="text-zinc-100 font-medium">{msg.productInfo.name}</div>
-                        <div className="text-emerald-400 font-bold mt-1">₹{msg.productInfo.price}</div>
+                      <div style={{
+                        marginBottom: 10, padding: "8px 10px",
+                        background: "rgba(0,0,0,0.15)", borderRadius: 8,
+                        borderLeft: "3px solid #22c55e", fontSize: 11,
+                      }}>
+                        <div style={{ fontWeight: 700, color: "#4ade80", marginBottom: 2 }}>Product Inquiry</div>
+                        <div style={{ color: msg.role === "Admin" ? "#fff" : "var(--text-primary)" }}>{msg.productInfo.name}</div>
+                        <div style={{ color: "#4ade80", fontWeight: 700 }}>₹{msg.productInfo.price}</div>
                       </div>
                     )}
-                    
-                    <div className="text-[10px] opacity-60 mb-1 font-medium">{msg.senderName}</div>
-                    <div className="leading-relaxed">{msg.text}</div>
-                    
-                    {renderReactions(msg.reactions)}
-                    
-                    <div className="text-[9px] opacity-40 mt-2 text-right">
-                      {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                    </div>
-
-                    {/* Action Bar (Hover Only) */}
-                    <div className={`absolute top-0 ${msg.role === 'Admin' ? '-left-24' : '-right-24'} opacity-0 group-hover:opacity-100 transition-all duration-200 transform group-hover:translate-x-0 flex items-center gap-1 bg-zinc-900 shadow-2xl border border-zinc-700 rounded-full px-2 py-1 z-20`}>
-                      <button 
-                        onClick={() => setReplyingTo(msg)}
-                        className="p-1.5 hover:bg-zinc-800 rounded-full text-zinc-400 hover:text-white transition-colors"
-                        title="Reply"
-                      >
-                        ↩️
-                      </button>
-                      <button 
-                        onClick={() => handleAddReaction(msg.id, "👍")}
-                        className="p-1.5 hover:bg-zinc-800 rounded-full text-[12px] transition-transform hover:scale-125"
-                      >
-                        👍
-                      </button>
-                      <button 
-                        onClick={() => handleAddReaction(msg.id, "❤️")}
-                        className="p-1.5 hover:bg-zinc-800 rounded-full text-[12px] transition-transform hover:scale-125"
-                      >
-                        ❤️
-                      </button>
+                    <div style={{ fontSize: 10, opacity: 0.6, marginBottom: 4, fontWeight: 600 }}>{msg.senderName}</div>
+                    <div style={{ lineHeight: 1.5 }}>{msg.text}</div>
+                    <div style={{ fontSize: 9, opacity: 0.4, marginTop: 6, textAlign: "right" }}>
+                      {new Date(msg.timestamp).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
                     </div>
                   </div>
                 </div>
               ))}
-                <div ref={messagesEndRef} />
+              <div ref={messagesEndRef} />
             </div>
 
-            {/* Input Area */}
-            <div className="p-4 bg-zinc-950/80 border-t border-zinc-800">
+            {/* Input */}
+            <div style={{
+              padding: "14px 16px",
+              borderTop: "1px solid var(--border-color)",
+              background: "var(--bg-secondary)",
+            }}>
               {replyingTo && (
-                <div className="mb-3 px-3 py-2 bg-zinc-900 border-l-4 border-cyan-500 rounded flex justify-between items-center animate-in slide-in-from-bottom-2 duration-200">
-                  <div className="text-xs text-zinc-400 truncate pr-4">
-                    Replying to <span className="text-zinc-200 font-bold">{replyingTo.senderName}</span>: {replyingTo.text}
-                  </div>
-                  <button onClick={() => setReplyingTo(null)} className="text-zinc-500 hover:text-white text-xs">✕</button>
+                <div style={{
+                  marginBottom: 10, padding: "6px 12px",
+                  background: "var(--bg-primary)",
+                  borderLeft: "3px solid #06b6d4", borderRadius: 6,
+                  fontSize: 11, display: "flex", justifyContent: "space-between", alignItems: "center",
+                }}>
+                  <span style={{ color: "var(--text-secondary)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                    Replying to <strong style={{ color: "var(--text-primary)" }}>{replyingTo.senderName}</strong>: {replyingTo.text}
+                  </span>
+                  <button onClick={() => setReplyingTo(null)} style={{ marginLeft: 8, color: "var(--text-secondary)", background: "none", border: "none", cursor: "pointer" }}>✕</button>
                 </div>
               )}
-              
-              <form onSubmit={handleSendReply} className="flex gap-3">
+              <form onSubmit={handleSendReply} style={{ display: "flex", gap: 10 }}>
                 <input
                   type="text"
                   value={replyText}
                   onChange={(e) => setReplyText(e.target.value)}
                   placeholder="Type a message..."
-                  className="flex-1 bg-zinc-900 border border-zinc-800 rounded-xl px-4 py-3 text-sm text-zinc-100 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 transition-all placeholder:text-zinc-600 shadow-inner"
+                  style={{
+                    flex: 1, background: "var(--bg-primary)",
+                    border: "1px solid var(--border-color)",
+                    borderRadius: 12, padding: "10px 14px",
+                    fontSize: 13, color: "var(--text-primary)", outline: "none",
+                  }}
                 />
                 <button
                   type="submit"
                   disabled={!replyText.trim()}
-                  className="bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 disabled:from-zinc-800 disabled:to-zinc-800 disabled:text-zinc-600 text-white rounded-xl px-6 py-3 font-bold transition-all shadow-lg active:scale-95 flex items-center gap-2"
+                  style={{
+                    padding: "10px 20px", borderRadius: 12, border: "none",
+                    background: replyText.trim()
+                      ? "linear-gradient(135deg,#0891b2,#2563eb)"
+                      : "var(--border-color)",
+                    color: replyText.trim() ? "#fff" : "var(--text-secondary)",
+                    fontWeight: 700, fontSize: 13,
+                    cursor: replyText.trim() ? "pointer" : "not-allowed",
+                    transition: "all 0.2s",
+                  }}
                 >
                   Send
                 </button>
@@ -368,13 +388,24 @@ const scrollToBottom = () => {
             </div>
           </>
         ) : (
-          <div className="flex-1 flex flex-col items-center justify-center text-zinc-700 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-zinc-900/20 to-transparent">
-            <div className="w-20 h-20 rounded-3xl bg-zinc-900 flex items-center justify-center text-4xl mb-6 shadow-2xl border border-zinc-800">
+          <div style={{
+            flex: 1, display: "flex", flexDirection: "column",
+            alignItems: "center", justifyContent: "center", gap: 12,
+          }}>
+            <div style={{
+              width: 72, height: 72, borderRadius: 20,
+              background: "var(--bg-secondary)",
+              border: "1px solid var(--border-color)",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              fontSize: 32,
+            }}>
               💬
             </div>
-            <h3 className="text-lg font-bold text-zinc-500">No conversation selected</h3>
-            <p className="text-sm text-zinc-600 max-w-xs text-center mt-2">
-              Choose a customer from the left sidebar to view their inquiry and start chatting.
+            <h3 style={{ fontSize: 16, fontWeight: 700, color: "var(--text-secondary)", margin: 0 }}>
+              No conversation selected
+            </h3>
+            <p style={{ fontSize: 13, color: "var(--text-secondary)", maxWidth: 260, textAlign: "center", margin: 0 }}>
+              Choose a customer from the left sidebar to start chatting.
             </p>
           </div>
         )}

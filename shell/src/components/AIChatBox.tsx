@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useMemo } from "react";
-import { useChatStore, type ChatMessage } from "../store/useChatStore";
+import { useChatStore } from "../store/useChatStore";
 import { useAuthStore } from "../store/useAuthStore";
 import { signalRService } from "../api/signalrService";
 
@@ -8,7 +8,6 @@ const AIChatBox: React.FC = () => {
   const { user } = useAuthStore();
   const convId = useChatStore((state) => state.activeConversationId);
   const [inputValue, setInputValue] = useState("");
-  const [replyingTo, setReplyingTo] = useState<ChatMessage | null>(null);
   const [activeProduct, setActiveProduct] = useState<{
     id: string;
     name: string;
@@ -43,7 +42,6 @@ const AIChatBox: React.FC = () => {
         : "Guest",
       text: inputValue,
       role: "User",
-      parentMessageId: replyingTo?.id,
       productInfo: activeProduct
         ? {
             id: activeProduct.id,
@@ -61,12 +59,9 @@ const AIChatBox: React.FC = () => {
 
     setInputValue("");
     setActiveProduct(null);
-    setReplyingTo(null);
   };
 
-  const handleAddReaction = (messageId: string, emoji: string) => {
-    signalRService.addReaction(messageId, emoji);
-  };
+
 
   const renderReactions = (reactionsJson?: string) => {
     if (!reactionsJson) return null;
@@ -197,12 +192,6 @@ const AIChatBox: React.FC = () => {
                         })}
                       </span>
                     </div>
-
-                    <div className={`absolute top-0 ${msg.role === 'User' ? '-left-16' : '-right-16'} opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1 bg-zinc-900 border border-zinc-700 rounded-full px-1.5 py-0.5 z-10 shadow-xl`}>
-                       <button onClick={() => setReplyingTo(msg)} className="p-1 hover:bg-zinc-800 rounded-full text-[10px]" title="Reply">↩️</button>
-                       <button onClick={() => handleAddReaction(msg.id, "👍")} className="p-1 hover:bg-zinc-800 rounded-full text-[10px]">👍</button>
-                       <button onClick={() => handleAddReaction(msg.id, "❤️")} className="p-1 hover:bg-zinc-800 rounded-full text-[10px]">❤️</button>
-                    </div>
                   </div>
                 </div>
               ))
@@ -211,12 +200,6 @@ const AIChatBox: React.FC = () => {
           </div>
 
           <div className="p-3 bg-zinc-900 border-t border-zinc-800">
-            {replyingTo && (
-              <div className="mb-2 px-2 py-1 bg-zinc-800 border-l-2 border-cyan-500 rounded text-[10px] flex justify-between items-center">
-                <span className="truncate opacity-70">Reply to: {replyingTo.text}</span>
-                <button onClick={() => setReplyingTo(null)} className="ml-2 text-zinc-500 hover:text-white">✕</button>
-              </div>
-            )}
             <form onSubmit={handleSendMessage} className="flex gap-2">
               <input
                 type="text"

@@ -73,7 +73,6 @@ export const useChatStore = create<ChatState>()(
            return state;
         }
 
-        // Prevent optimistic UI duplicates being rendered twice when SignalR echoes the same message back
         const existingOptimistic = state.messages.find(m => 
             m.senderId === message.senderId && 
             m.text === message.text && 
