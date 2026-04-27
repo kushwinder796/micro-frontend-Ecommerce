@@ -1,10 +1,12 @@
 import { Suspense, lazy, useEffect } from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, useParams } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import LandingPage from "./components/LandingPage";
 import ErrorBoundary from "./components/ErrorBoundary";
 import ProtectedRoute from "./routes/ProtectedRoute";
+import StaticPage from "./components/pages/StaticPage";
+import ScrollToTop from "./components/ScrollToTop";
 import { useAuthStore } from "./store/useAuthStore";
 import { useThemeStore } from "./store/useThemeStore";
 import { useChatStore } from "./store/useChatStore";
@@ -12,9 +14,14 @@ import { signalRService } from "./api/signalrService";
 import AIChatBox from "./components/AIChatBox";
 import AdminChatDashboard from "./components/AdminChatDashboard";
 
-const AuthApp = lazy(() => import("authApp/AuthApp"));
+const AuthApp     = lazy(() => import("authApp/AuthApp"));
 const ProductsApp = lazy(() => import("productsApp/ProductsApp"));
-const CartApp = lazy(()=>import ("cartApp/CartApp"));
+const CartApp     = lazy(() => import("cartApp/CartApp"));
+
+const StaticPageRoute = () => {
+  const { slug } = useParams<{ slug: string }>();
+  return <StaticPage slug={slug ?? ""} />;
+};
 
 const Spinner = () => (
   <div className="flex items-center justify-center min-h-[60vh]">
@@ -42,6 +49,7 @@ const App = () => {
 
   return (
     <div className="w-full min-h-screen transition-colors duration-300" style={{ backgroundColor: 'var(--bg-primary)', color: 'var(--text-primary)' }}>
+      <ScrollToTop />
       <Navbar />
       <main>
         <ErrorBoundary>
@@ -58,6 +66,8 @@ const App = () => {
               <Route element={<ProtectedRoute role="Admin" />}>
                 <Route path="/admin/*" element={<ProductsApp />} />
               </Route>
+
+              <Route path="/:slug" element={<StaticPageRoute />} />
 
               <Route path="*" element={<Navigate to="/" replace />} />
               

@@ -3,28 +3,28 @@ import { useState } from 'react';
 
 const footerLinks = {
   Product: [
-    { label: 'Features', href: '/' },
-    { label: 'Pricing', href: '/' },
-    { label: 'Best Sellers', href: '/' },
-    { label: 'Categories', href: '/' },
+    { label: 'Features',     href: '/features' },
+    { label: 'Pricing',      href: '/pricing' },
+    { label: 'Best Sellers', href: '/best-sellers' },
+    { label: 'Categories',   href: '/categories' },
   ],
   Company: [
-    { label: 'About Us', href: '/' },
-    { label: 'Careers', href: '/' },
-    { label: 'Partners', href: '/' },
+    { label: 'About Us',  href: '/about-us' },
+    { label: 'Careers',   href: '/careers' },
+    { label: 'Partners',  href: '/partners' },
   ],
   Support: [
-    { label: 'Help Center', href: '/' },
-    { label: 'Contact Us', href: '/' },
-    { label: 'Returns', href: '/' },
-    { label: 'Order Status', href: '/' },
-    { label: 'Shipping Info', href: '/' },
+    { label: 'Help Center',   href: '/help-center' },
+    { label: 'Contact Us',    href: '/contact-us' },
+    { label: 'Returns',       href: '/returns' },
+    { label: 'Order Status',  href: '/order-status' },
+    { label: 'Shipping Info', href: '/shipping-info' },
   ],
   Legal: [
-    { label: 'Privacy Policy', href: '/' },
-    { label: 'Terms of Service', href: '/' },
-    { label: 'Cookie Policy', href: '/' },
-    { label: 'Licenses', href: '/' },
+    { label: 'Privacy Policy',    href: '/privacy-policy' },
+    { label: 'Terms of Service',  href: '/terms-of-service' },
+    { label: 'Cookie Policy',     href: '/cookie-policy' },
+    { label: 'Licenses',          href: '/licenses' },
   ],
 };
 

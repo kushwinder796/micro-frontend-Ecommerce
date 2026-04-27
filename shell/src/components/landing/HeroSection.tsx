@@ -13,7 +13,7 @@ const HeroSection: React.FC = () => {
   }, []);
 
   return (
-    <section className="relative isolate overflow-hidden min-h-screen flex items-center">
+    <section className="relative isolate overflow-hidden py-8 flex items-center">
       {/* Animated gradient orbs */}
       <div className="absolute inset-0 -z-10">
         <div
@@ -53,7 +53,7 @@ const HeroSection: React.FC = () => {
         }}
       />
 
-      <div className="mx-auto max-w-7xl px-6 lg:px-8 py-20 w-full">
+      <div className="mx-auto max-w-7xl px-6 lg:px-8 py-8 w-full">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           {/* Left Content */}
           <div className="space-y-8 animate-[fadeInUp_0.8s_ease-out]">
